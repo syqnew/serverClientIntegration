@@ -23,24 +23,19 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 			$('#startPeriodButton').on("click", function(event) {
 				event.preventDefault();
 				$('#startPeriodButton').button('loading');
-
-//				 var getTest = $.ajax({
-//				 type: "GET",
-//				 url: "http://localhost:8080/admin/",
-//				 dataType: "html",
-//				 success: function(data) {
-//				 console.log(data);
-//				 }
-//				 });
-//				 var postTest = $.ajax({
-//				 type: "POST",
-//				 url: "http://localhost:8080/admin/",
-//				 data: "blah",
-//				 dataType: "html",
-//				 success: function(data) {
-//				 console.log(data);
-//				 }
-//				 });
+				var data = {};
+				data["year"] = year;
+				data["year1Event"] = event1;
+				data["year2Event"] = event2;
+				var ajax = $.ajax({
+					type : "POST",
+					url : "http://localhost:8080/admin",
+					data : JSON.stringify(data),
+					dataType : "json",
+					success : function(data) {
+						console.log(data);
+					}
+				});
 				timer(duration, '#timer', '#startPeriodButton');
 			});
 		}

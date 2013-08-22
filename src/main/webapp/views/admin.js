@@ -19,7 +19,6 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 						data["year"] = 0;
 						data["year1Event"] = event1;
 						data["year2Event"] = event2;
-						console.log(data);
 						var ajax = $.ajax({
 							type : "POST",
 							url : "http://localhost:8080/admin",
@@ -32,7 +31,6 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 						var marketSessionView = new MarketSessionView();
 						marketSessionView.render(event1, event2, duration);
 					});
-
 				}
 			});
 			return AdminView;
