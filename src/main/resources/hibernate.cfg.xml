@@ -28,7 +28,7 @@
          
         <property name="hbm2ddl.auto">validate</property>
   
-        <mapping class="com.github.syqnew.domain.Student" />
+        <mapping class="com.github.syqnew.domain.MarketState" />
          
           
     </session-factory>

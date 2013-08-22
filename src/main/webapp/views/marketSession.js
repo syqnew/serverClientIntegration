@@ -24,8 +24,23 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 				event.preventDefault();
 				$('#startPeriodButton').button('loading');
 
-				var data = {};
-				data["event"] = event1;
+//				 var getTest = $.ajax({
+//				 type: "GET",
+//				 url: "http://localhost:8080/admin/",
+//				 dataType: "html",
+//				 success: function(data) {
+//				 console.log(data);
+//				 }
+//				 });
+//				 var postTest = $.ajax({
+//				 type: "POST",
+//				 url: "http://localhost:8080/admin/",
+//				 data: "blah",
+//				 dataType: "html",
+//				 success: function(data) {
+//				 console.log(data);
+//				 }
+//				 });
 				timer(duration, '#timer', '#startPeriodButton');
 			});
 		}
