@@ -1,0 +1,67 @@
+<div class="row-fluid">
+	<div class="span9">
+		<div class="span5 ">
+			<div class="modal-header">
+				<h3>Admin</h3>
+			</div>
+			
+			<div class="modal-body">
+				<div class="well">		
+				
+					<!-- Select Basic -->
+					<div class="control-group">
+					  <label class="control-label">Year 1 Event</label>
+					  <div class="controls">
+					    <select id="event1" name="event1" class="input-medium">
+					      <option>X1</option>
+					      <option>Y1</option>
+					      <option>Z1</option>
+					    </select>
+					  </div>
+					</div>
+					
+					<!-- Select Basic -->
+					<div class="control-group">
+					  <label class="control-label">Year 2 Event</label>
+					  <div class="controls">
+					    <select id="event2" name="event2" class="input-medium">
+					      <option>X2</option>
+					      <option>Y2</option>
+					      <option>Z2</option>
+					    </select>
+					  </div>
+					</div>
+					
+					<!-- Select Basic -->
+					<div class="control-group">
+					  <label class="control-label">Duration (in minutes)</label>
+					  <div class="controls">
+					    <select id="duration" name="duration" class="input-medium">
+					      <option>1</option>
+					      <option>2</option>
+					      <option>3</option>
+					      <option>4</option>
+					      <option selected="selected">5</option>
+					      <option>6</option>
+					      <option>7</option>
+					      <option>8</option>
+					      <option>9</option>
+					      <option>10</option>
+					    </select>
+					  </div>
+					</div>
+					
+					<!-- Button -->
+					<div class="control-group">
+					  <label class="control-label"></label>
+					  <div class="controls">
+					    <button id="startButton" name="startButton" class="btn btn-info">Next</button>
+					  </div>
+					</div>	
+			
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</div>

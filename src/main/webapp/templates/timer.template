@@ -1,0 +1,11 @@
+<div class=".table-hover">
+	<table>
+		<tr>
+			<th>Year {{year}}:	</th>
+			<th>{{minutes}}</th>
+			<th>m</th>
+			<th>{{seconds}}</th>
+			<th>s</th>
+		</tr>
+	</table>
+</div>

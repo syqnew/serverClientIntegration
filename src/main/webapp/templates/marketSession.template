@@ -1,0 +1,35 @@
+<div class="row-fluid">
+	<div class="span9">
+		<div class="span5 ">
+			<div class="modal-header">
+				<h3>Market Session</h3>
+			</div>
+			
+			<div class="modal-body">
+				<div class="well">	
+				
+				<div class="page-header">
+					<hgroup>
+	  					<h4>Year 1 Event: {{event1}}</h1>
+	  					<h4>Year 2 Event: {{event2}}</h1>
+	  					<h4>Duration: {{duration}} minutes</h1>
+  					</hgroup>
+				</div>	
+				
+				<div id="timer"></div>
+				
+				<!-- Button -->
+				<div class="control-group">
+				  <label class="control-label"></label>
+				  <div class="controls">
+				    <button id="startPeriodButton" name="startPeriodButton" class="btn btn-info" data-loading-text="Running..." data-complete-text="Start Year 2">Start Year 1</button>
+				  </div>
+				</div>
+				
+
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</div>
