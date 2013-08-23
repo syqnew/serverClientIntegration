@@ -9,8 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.github.syqnew.dao.MarketOrderDao;
 import com.github.syqnew.dao.MarketStateDao;
+import com.github.syqnew.dao.impl.MarketOrderDaoImpl;
 import com.github.syqnew.dao.impl.MarketStateDaoImpl;
+import com.github.syqnew.domain.MarketOrder;
 import com.github.syqnew.domain.MarketState;
 
 public class OrderServlet extends HttpServlet {
@@ -33,13 +36,13 @@ public class OrderServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		response.setStatus(HttpServletResponse.SC_OK);
-		// adminServices.updateMarketState(request);
-		ObjectMapper mapper = new ObjectMapper();
-		MarketState marketState = mapper.readValue(request.getReader(),
-				MarketState.class);
 
-		MarketStateDao dao = new MarketStateDaoImpl();
-		dao.persist(marketState);
+		ObjectMapper mapper = new ObjectMapper();
+		MarketOrder order = mapper.readValue(request.getReader(),
+				MarketOrder.class);
+
+		MarketOrderDao dao = new MarketOrderDaoImpl();
+		dao.persist(order);
 		response.getWriter().println("POST");
 	}
 
