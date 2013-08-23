@@ -12,4 +12,22 @@
 		<url-pattern>/admin/*</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>ClientServlet</servlet-name>
+		<servlet-class>com.github.syqnew.servlets.ClientServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ClientServlet</servlet-name>
+		<url-pattern>/client/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>OrderServlet</servlet-name>
+		<servlet-class>com.github.syqnew.servlets.OrderServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OrderServlet</servlet-name>
+		<url-pattern>/order/*</url-pattern>
+	</servlet-mapping>
+	
 </web-app>

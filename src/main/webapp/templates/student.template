@@ -65,11 +65,11 @@
 					</form>
 					
 					<p>
-				  		<button id="button1" class="btn btn-primary" type="button">Market Buy</button>
-				  		<button id="button2" class="btn btn-danger" type="button">Market Sell</button>
+				  		<button id="marketBuyBtn" class="btn btn-primary" type="button">Market Buy</button>
+				  		<button id="marketSellBtn" class="btn btn-danger" type="button">Market Sell</button>
 				  		
-				  		<button id="button3" class="btn btn-primary" type="button">Limit Buy</button>
-				  		<button id="button4" class="btn btn-danger" type="button">Limit Sell</button>
+				  		<button id="limitBuyBtn" class="btn btn-primary" type="button">Limit Buy</button>
+				  		<button id="limitSellBtn" class="btn btn-danger" type="button">Limit Sell</button>
 					</p>
 				</div>
 			</div>

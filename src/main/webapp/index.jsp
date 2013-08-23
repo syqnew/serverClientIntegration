@@ -21,15 +21,11 @@
 						<li class="active"><a href="#student" data-toggle="tab">Student</a></li>
 						<li><a href="#admin" data-toggle="tab">Admin</a></li>
 					</ul>
-					<div class="alert"  id="adminAlert">
+					<div class="alert" id="adminAlert">
 						<button type="button" class="close" data-dismiss="alert">&times;</button>
 						<strong>Warning!</strong> Username or Password was incorrect
 					</div>
 
-					<div class="alert" id="studentAlert">
-						<button type="button" class="close" data-dismiss="alert">&times;</button>
-						<strong>Warning!</strong> Email Address not Valid
-					</div>
 					<div id="myTabContent" class="tab-content">
 						<div class="tab-pane active in" id="student">
 							<div class="control-group">

@@ -18,27 +18,24 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 				email : email
 			}));
 			$('#graph').html(_graphTemplate());
-//			$('#studentTimer').html(_timerTemplate({
-//				year : "1",
-//				minutes : "2",
-//				seconds : "00"
-//			}));
-
+			
+			//took out flot chart for now
+			
+			// make get requests to the server until Market is opened
 			if (marketYear == 0) marketInterval = setInterval(checkMarketState, 900);
-
-			// flot testing
-			flotGraph('#placeholder');
-			// var d1 = [];
-			// for (var i = 0; i < 14; i += 0.5) {
-			// d1.push([i, Math.sin(i)]);
-			// }
-			// var d2 = [[0, 3], [4, 8], [8, 5], [9, 13]];
-			// // A null signifies separate line segments
-			// var d3 = [[0, 12], [7, 12], null, [7, 2.5], [12, 2.5]];
-			// $.plot("#placeholder", [d1, d2, d3]);
-
-			// timer testing
-			// timer(2, '#studentTimer', null, 1);
+			
+			$('#marketBuyBtn').on("click", function(event) {
+				event.preventDefault();
+				var ajax = $.ajax({
+					type : "POST",
+					url : "http://localhost:8080/trader",
+					data : JSON.stringify(data),
+					dataType : "json",
+					success : function(data) {
+						console.log(data);
+					}
+				});
+			});
 		}
 	});
 
