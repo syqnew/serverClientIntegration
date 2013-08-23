@@ -3,6 +3,9 @@ package com.github.syqnew.domain;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
 public class MarketState implements BaseObject {
 

@@ -19,13 +19,20 @@ public class AdminServlet extends HttpServlet {
 	
 	private AdminServices adminServices;
 	
+	// for students  
+	// In mySQL: set global transaction isolation level read committed
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		response.setStatus(HttpServletResponse.SC_OK);
-		response.getWriter().println("GET");
+		
+		MarketStateDao dao = new MarketStateDaoImpl();
+		int currentYear = dao.getCurrentYear();
+		
+		response.getWriter().println(currentYear);
 	}
 
+	// For admins
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
