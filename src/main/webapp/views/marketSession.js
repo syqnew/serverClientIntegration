@@ -37,7 +37,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 						console.log(data);
 					}
 				});
-				timer(duration, '#timer', '#startPeriodButton');
+				timer(true, duration, '#timer', '#startPeriodButton');
 			});
 		}
 	});

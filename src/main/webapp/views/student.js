@@ -1,12 +1,14 @@
 define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 		'text!templates/student.template', 'text!templates/graph.template',
-		'text!templates/timer.template', '../timer', '../flotGraph',
+		'text!templates/timer.template', 'text!templates/openOrders.template', 
+		'../timer', '../flotGraph', '../trading',
 		'flotTime', 'bootstrap' ], function(App, $, _, Backbone, Handlebars,
-		flot, studentTemplate, graphTemplate, timerTemplate) {
+		flot, studentTemplate, graphTemplate, timerTemplate, openOrdersTemplate) {
 
 	_studentTemplate = Handlebars.compile(studentTemplate);
 	_graphTemplate = Handlebars.compile(graphTemplate);
 	_timerTemplate = Handlebars.compile(timerTemplate);
+	_openOrdersTemplate = Handlebars.compile(openOrdersTemplate);
 
 	var marketYear = 0;
 	var marketInterval;
@@ -20,6 +22,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 			}));
 			$('#graph').html(_graphTemplate());
 
+			// get id assigned to this client
 			var clientData = "email=" + email;
 			var ajax = $.ajax({
 				type : "GET",
@@ -31,8 +34,6 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 						clientId = data;
 				}
 			});
-
-			// took out flot chart for now
 
 			// make get requests to the server until Market is opened
 			if (marketYear == 0)
@@ -151,7 +152,8 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 				if (data["year"] > 0) {
 					marketYear = data["year"];
 					clearInterval(marketInterval);
-					timer(data["duration"], '#studentTimer');
+					timer(false, data["duration"], '#studentTimer');
+					tradingOpen(data["duration"], clientId);
 				}
 			}
 		});

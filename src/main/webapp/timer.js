@@ -1,26 +1,34 @@
-var timerId, timeLeft, placeholder, button;
+var timerId, timeLeft, placeholder, button, admin;
 var year = 1;
 
-function timer(duration, placeholderr, buttonn, yearr) {
-	if (buttonn) button = buttonn;
-	if (yearr) year = yearr;
+function timer(adminn, duration, placeholderr, buttonn) {
+	admin = adminn;
+	if (buttonn)
+		button = buttonn;
 	placeholder = placeholderr;
 	timeLeft = duration * 1000 * 60;
 	timerId = setInterval(countdown, 1000);
 }
 
 function countdown() {
-	if (timeLeft > 0) timeLeft -= 1000;
+	if (timeLeft > 0) {
+		timeLeft -= 1000;
+		if (!admin) $('button').prop('disabled', false);
+	}
 	else {
 		clearInterval(timerId);
-		//logic only applies to the admin market session page
-		if (button) {
+
+		if (admin) {
 			$(button).button('complete');
 			if (year == 2) {
 				$(button).remove();
 			}
 		}
-		year = 2; 
+		else {
+			// disable the all the buttons
+			$('button').prop('disabled', true);
+		}
+		year = 2;
 	}
 
 	var minutes = Math.floor(timeLeft / (60 * 1000));

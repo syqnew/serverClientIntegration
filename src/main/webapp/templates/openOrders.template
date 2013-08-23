@@ -1,0 +1,10 @@
+<table class="table table-condensed">
+	{{#each orders}}
+	<tr>
+		<td>{{this}}</td>
+		<td>
+			<button id="button1" class="btn btn-warning" type="button">Cancel</button>
+		</td>
+	</tr>
+	{{/each}}
+</table>

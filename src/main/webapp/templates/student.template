@@ -83,19 +83,7 @@
 		  			<h4>Open Orders</h4>
 	  			</div>
 			</div>
-			<div class="modal-body">
-				<!-- Select Multiple -->
-				<div class="control-group">
-				  	<div class="controls">
-				    	<select id="openOrders" class="input-xlarge" multiple="multiple">
-				      	<option>Option one</option>
-				      	<option>Option two</option>
-				    	</select>
-				  	</div>
-				</div>
-				
-				<button id="button1" class="btn btn-warning" type="button">Cancel</button>
-				
+			<div class="modal-body" id="openOrders">
 			</div>
 		<div>
 		
