@@ -18,11 +18,11 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 				email : email
 			}));
 			$('#graph').html(_graphTemplate());
-			$('#studentTimer').html(_timerTemplate({
-				year : "1",
-				minutes : "2",
-				seconds : "00"
-			}));
+//			$('#studentTimer').html(_timerTemplate({
+//				year : "1",
+//				minutes : "2",
+//				seconds : "00"
+//			}));
 
 			if (marketYear == 0) marketInterval = setInterval(checkMarketState, 900);
 
@@ -49,10 +49,10 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 			dataType : "json",
 			success : function(data) {
 				console.log(data);
-				console.log(data["year"]);
 				if (data["year"] > 0){
 					marketYear = data["year"];
 					clearInterval(marketInterval);
+					timer(data["duration"], '#studentTimer');
 				}
 			}
 		});
