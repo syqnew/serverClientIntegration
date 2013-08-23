@@ -19,23 +19,25 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 				email : email
 			}));
 			$('#graph').html(_graphTemplate());
-			
+
 			var clientData = "email=" + email;
 			var ajax = $.ajax({
 				type : "GET",
 				url : "http://localhost:8080/client",
-				data: clientData,
+				data : clientData,
 				dataType : "html",
 				success : function(data) {
-					if(data) clientId = data;
+					if (data)
+						clientId = data;
 				}
 			});
-			
-			//took out flot chart for now
-			
+
+			// took out flot chart for now
+
 			// make get requests to the server until Market is opened
-			if (marketYear == 0) marketInterval = setInterval(checkMarketState, 900);
-			
+			if (marketYear == 0)
+				marketInterval = setInterval(checkMarketState, 900);
+
 			$('#marketBuyBtn').on("click", function(event) {
 				event.preventDefault();
 				var data = {};
@@ -47,19 +49,96 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 				// status 0 -> OK, 10 -> cancelled
 				data["status"] = 0;
 				data["client"] = clientId;
-				
+
 				var ajax = $.ajax({
 					type : "POST",
 					url : "http://localhost:8080/order",
 					data : JSON.stringify(data),
 					dataType : "json",
 					success : function(data) {
-						console.log(data);
+						console.log("success");
 					}
 				});
+				$('#size').val("");
+				$('#price').val("");
 			});
-			
-			
+
+			$('#marketSellBtn').on("click", function(event) {
+				event.preventDefault();
+				var data = {};
+				data["orderType"] = 2;
+				data["amount"] = $('#size').val();
+				data["price"] = -1;
+				data["time"] = new Date().getTime();
+				data["fulfilled"] = 0;
+				// status 0 -> OK, 10 -> cancelled
+				data["status"] = 0;
+				data["client"] = clientId;
+
+				var ajax = $.ajax({
+					type : "POST",
+					url : "http://localhost:8080/order",
+					data : JSON.stringify(data),
+					dataType : "json",
+					success : function(data) {
+						console.log("success");
+					}
+				});
+				$('#size').val("");
+				$('#price').val("");
+			});
+
+			$('#limitBuyBtn').on("click", function(event) {
+				event.preventDefault();
+				var data = {};
+				data["orderType"] = 3;
+				data["amount"] = $('#size').val();
+				data["price"] = $('#price').val();
+				data["time"] = new Date().getTime();
+				data["fulfilled"] = 0;
+				// status 0 -> OK, 10 -> cancelled
+				data["status"] = 0;
+				data["client"] = clientId;
+
+				var ajax = $.ajax({
+					type : "POST",
+					url : "http://localhost:8080/order",
+					data : JSON.stringify(data),
+					dataType : "json",
+					success : function(data) {
+						console.log("success");
+					}
+				});
+				$('#size').val("");
+				$('#price').val("");
+			});
+
+			$('#limitSellBtn').on("click", function(event) {
+				event.preventDefault();
+				var data = {};
+				data["orderType"] = 4;
+				data["amount"] = $('#size').val();
+				data["price"] = $('#price').val();
+				data["time"] = new Date().getTime();
+				data["fulfilled"] = 0;
+				// status 0 -> OK, 10 -> cancelled
+				data["status"] = 0;
+				data["client"] = clientId;
+
+				var ajax = $.ajax({
+					type : "POST",
+					url : "http://localhost:8080/order",
+					data : JSON.stringify(data),
+					dataType : "json",
+					success : function(data) {
+						console.log("success");
+					}
+				});
+				$('#size').val("");
+				$('#price').val("");
+
+			});
+
 		}
 	});
 
@@ -69,7 +148,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 			url : "http://localhost:8080/admin",
 			dataType : "json",
 			success : function(data) {
-				if (data["year"] > 0){
+				if (data["year"] > 0) {
 					marketYear = data["year"];
 					clearInterval(marketInterval);
 					timer(data["duration"], '#studentTimer');
