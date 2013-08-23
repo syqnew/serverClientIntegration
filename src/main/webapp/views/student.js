@@ -48,6 +48,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 			url : "http://localhost:8080/admin",
 			dataType : "html",
 			success : function(data) {
+				console.log(data);
 				if (data > 0){
 					marketYear = data;
 					clearInterval(marketInterval);

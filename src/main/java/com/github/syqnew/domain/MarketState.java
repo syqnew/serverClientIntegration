@@ -13,14 +13,16 @@ public class MarketState implements BaseObject {
 	private int year;
 	private String year1Event;
 	private String year2Event;
+	private int duration;
 
 	public MarketState() {
 	}
 
-	public MarketState(int year, String year1Event, String year2Event) {
+	public MarketState(int year, String year1Event, String year2Event, int duration) {
 		this.year = year;
 		this.year1Event = year1Event;
 		this.year2Event = year2Event;
+		this.duration = duration;
 	}
 
 	public int getYear() {
@@ -45,6 +47,14 @@ public class MarketState implements BaseObject {
 
 	public void setYear2Event(String year2Event) {
 		this.year2Event = year2Event;
+	}
+	
+	public int getDuration() {
+		return duration;
+	}
+	
+	public void setDuration(int duration) {
+		this.duration = duration;
 	}
 
 }

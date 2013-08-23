@@ -19,6 +19,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 						data["year"] = 0;
 						data["year1Event"] = event1;
 						data["year2Event"] = event2;
+						data["duration"] = duration;
 						var ajax = $.ajax({
 							type : "POST",
 							url : "http://localhost:8080/admin",
