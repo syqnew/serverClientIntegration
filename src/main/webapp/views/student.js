@@ -46,11 +46,12 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 		var ajax = $.ajax({
 			type : "GET",
 			url : "http://localhost:8080/admin",
-			dataType : "html",
+			dataType : "json",
 			success : function(data) {
 				console.log(data);
-				if (data > 0){
-					marketYear = data;
+				console.log(data["year"]);
+				if (data["year"] > 0){
+					marketYear = data["year"];
 					clearInterval(marketInterval);
 				}
 			}

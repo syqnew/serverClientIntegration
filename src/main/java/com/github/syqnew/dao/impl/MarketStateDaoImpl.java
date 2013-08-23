@@ -1,9 +1,13 @@
 package com.github.syqnew.dao.impl;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
 
 import com.github.syqnew.HibernateUtil;
 import com.github.syqnew.dao.MarketStateDao;
@@ -15,18 +19,19 @@ public class MarketStateDaoImpl extends BaseDaoImpl<MarketState> implements Mark
 		super(MarketState.class);
 	}
 
-	public int getCurrentYear() {
+	public MarketState getCurrentMarketState() {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 
-		Criteria criteria = session.createCriteria(MarketState.class)
+		DetachedCriteria maxYear = DetachedCriteria.forClass(MarketState.class)
 				.setProjection(Projections.max("year"));
 		
-		int currentYear = (Integer) criteria.uniqueResult();
-		session.clear();
+		List<MarketState> list = session.createCriteria(MarketState.class).add(Property.forName("year").eq(maxYear)).list();
+
 		session.close();
 		
-		return currentYear;
+		return list.get(0);
 	}
+
 
 }

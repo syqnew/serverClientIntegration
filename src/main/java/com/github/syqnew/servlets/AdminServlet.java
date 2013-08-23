@@ -27,9 +27,11 @@ public class AdminServlet extends HttpServlet {
 		response.setStatus(HttpServletResponse.SC_OK);
 		
 		MarketStateDao dao = new MarketStateDaoImpl();
-		int currentYear = dao.getCurrentYear();
+		MarketState currentMarketState = dao.getCurrentMarketState();
 		
-		response.getWriter().println(currentYear);
+		ObjectMapper mapper = new ObjectMapper();	
+		
+		response.getWriter().println(mapper.writeValueAsString(currentMarketState));
 	}
 
 	// For admins
