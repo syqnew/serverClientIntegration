@@ -15,8 +15,11 @@ import com.github.syqnew.dao.impl.MarketOrderDaoImpl;
 import com.github.syqnew.dao.impl.MarketStateDaoImpl;
 import com.github.syqnew.domain.MarketOrder;
 import com.github.syqnew.domain.MarketState;
+import com.github.syqnew.services.OrderServices;
 
 public class OrderServlet extends HttpServlet {
+	
+	OrderServices orderServices = new OrderServices();
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -36,14 +39,7 @@ public class OrderServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		response.setStatus(HttpServletResponse.SC_OK);
-
-		ObjectMapper mapper = new ObjectMapper();
-		MarketOrder order = mapper.readValue(request.getReader(),
-				MarketOrder.class);
-
-		MarketOrderDao dao = new MarketOrderDaoImpl();
-		dao.merge(order);
-		response.getWriter().println("POST");
+		orderServices.submitOrder(request);
 	}
 
 }

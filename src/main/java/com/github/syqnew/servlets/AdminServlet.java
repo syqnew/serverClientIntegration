@@ -7,17 +7,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.codehaus.jackson.map.ObjectMapper;
-
-import com.github.syqnew.dao.MarketStateDao;
-import com.github.syqnew.dao.impl.MarketStateDaoImpl;
-import com.github.syqnew.domain.MarketState;
-import com.github.syqnew.services.*;
+import com.github.syqnew.services.AdminServices;
 
 
 public class AdminServlet extends HttpServlet {
 	
-	private AdminServices adminServices;
+	private AdminServices adminServices = new AdminServices();
 	
 	// for students  
 	// In mySQL: set global transaction isolation level read committed
@@ -25,13 +20,7 @@ public class AdminServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		response.setStatus(HttpServletResponse.SC_OK);
-		
-		MarketStateDao dao = new MarketStateDaoImpl();
-		MarketState currentMarketState = dao.getCurrentMarketState();
-		
-		ObjectMapper mapper = new ObjectMapper();	
-		
-		response.getWriter().println(mapper.writeValueAsString(currentMarketState));
+		adminServices.getCurrentYear(request, response);
 	}
 
 	// For admins
@@ -39,7 +28,6 @@ public class AdminServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		response.setStatus(HttpServletResponse.SC_OK);
-		adminServices = new AdminServices();
 		adminServices.updateMarketState(request);
 	}
 
