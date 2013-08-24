@@ -48,7 +48,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 				data["amount"] = $('#size').val();
 				data["price"] = -1;
 				data["time"] = new Date().getTime();
-				data["fulfilled"] = 0;
+				data["unfulfilled"] = $('#size').val();
 				// status 0 -> OK, 10 -> cancelled
 				data["status"] = 0;
 				data["client"] = clientId;
@@ -73,7 +73,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 				data["amount"] = $('#size').val();
 				data["price"] = -1;
 				data["time"] = new Date().getTime();
-				data["fulfilled"] = 0;
+				data["unfulfilled"] = $('#size').val();
 				// status 0 -> OK, 10 -> cancelled
 				data["status"] = 0;
 				data["client"] = clientId;
@@ -98,7 +98,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 				data["amount"] = $('#size').val();
 				data["price"] = $('#price').val();
 				data["time"] = new Date().getTime();
-				data["fulfilled"] = 0;
+				data["unfulfilled"] = $('#size').val();
 				// status 0 -> OK, 10 -> cancelled
 				data["status"] = 0;
 				data["client"] = clientId;
@@ -123,7 +123,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 				data["amount"] = $('#size').val();
 				data["price"] = $('#price').val();
 				data["time"] = new Date().getTime();
-				data["fulfilled"] = 0;
+				data["unfulfilled"] = $('#size').val();
 				// status 0 -> OK, 10 -> cancelled
 				data["status"] = 0;
 				data["client"] = clientId;

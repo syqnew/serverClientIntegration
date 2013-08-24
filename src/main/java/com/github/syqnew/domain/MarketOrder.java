@@ -1,6 +1,10 @@
 package com.github.syqnew.domain;
 
 import javax.persistence.Entity;
+
+/**
+ * This table actually contains both market and limit orders. However, order is a reserved word in mySQL.
+ */
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
@@ -15,20 +19,20 @@ public class MarketOrder implements BaseObject {
 	private int client;
 	private int amount;
 	private int price;
-	private int fulfilled;
+	private int unfulfilled;
 	private long time;
 
 	public MarketOrder() {
 	}
 
 	public MarketOrder(int orderType, int status, int client, int amount,
-			int price, int fulfilled, long time) {
+			int price, int unfulfilled, long time) {
 		this.orderType = orderType;
 		this.status = status;
 		this.client = client;
 		this.amount = amount;
 		this.price = price;
-		this.fulfilled = fulfilled;
+		this.unfulfilled = unfulfilled;
 		this.time = time;
 	}
 
@@ -80,12 +84,12 @@ public class MarketOrder implements BaseObject {
 		this.price = price;
 	}
 
-	public int getFulfilled() {
-		return fulfilled;
+	public int getUnfulfilled() {
+		return unfulfilled;
 	}
 
-	public void setFulfilled(int fulfilled) {
-		this.fulfilled = fulfilled;
+	public void setUnfulfilled(int unfulfilled) {
+		this.unfulfilled = unfulfilled;
 	}
 
 	public long getTime() {
@@ -94,6 +98,21 @@ public class MarketOrder implements BaseObject {
 
 	public void setTime(long time) {
 		this.time = time;
+	}
+	
+	public void fulfillOrder(int size) {
+		this.unfulfilled -= size;
+		if (this.unfulfilled < 0) {
+			int overspill = Math.abs(this.unfulfilled);
+			this.unfulfilled = 0;
+			this.status = 5;
+		} else if (this.unfulfilled == 0) {
+			this.status = 5;
+		} 
+	}
+	
+	public void cancelOrder() {
+		this.status = 10;
 	}
 
 }

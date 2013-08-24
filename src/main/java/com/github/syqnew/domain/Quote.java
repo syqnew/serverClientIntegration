@@ -23,6 +23,13 @@ public class Quote implements BaseObject {
 	public Quote() {
 	}
 
+	public Quote(int price, int volume, long time) {
+		super();
+		this.price = price;
+		this.volume = volume;
+		this.time = time;
+	}
+
 	public int getId() {
 		return id;
 	}
