@@ -103,7 +103,6 @@ public class MarketOrder implements BaseObject {
 	public void fulfillOrder(int size) {
 		this.unfulfilled -= size;
 		if (this.unfulfilled < 0) {
-			int overspill = Math.abs(this.unfulfilled);
 			this.unfulfilled = 0;
 			this.status = 5;
 		} else if (this.unfulfilled == 0) {

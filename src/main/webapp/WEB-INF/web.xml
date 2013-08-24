@@ -47,4 +47,13 @@
 		<servlet-name>MarketMakerServlet</servlet-name>
 		<url-pattern>/marketMaker/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>NewsServlet</servlet-name>
+		<servlet-class>com.github.syqnew.servlets.NewsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>NewsServlet</servlet-name>
+		<url-pattern>/news/*</url-pattern>
+	</servlet-mapping>
 </web-app>

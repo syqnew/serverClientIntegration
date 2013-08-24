@@ -22,9 +22,13 @@ public class MarketMakerServices {
 		dao = new MarketOrderDaoImpl();
 		quoteDao = new QuoteDaoImpl();
 	}
+	
+	public void handleOrders() {
+		handleMarketOrders();
+		handleLimitOrders();
+	}
 
-	public void handleMarketOrders(HttpServletRequest request,
-			HttpServletResponse response) {
+	private void handleMarketOrders() {
 
 		List<MarketOrder> marketOrders = dao.getMarketOrders();
 
@@ -47,7 +51,7 @@ public class MarketMakerServices {
 						currentOrder.fulfillOrder(volume);
 						dao.merge(bestAsk);
 						dao.merge(currentOrder);
-						
+
 						Quote quote = new Quote(price, volume, currentTime);
 						quote.setAsk(price);
 						quote.setAskSize(volume);
@@ -58,7 +62,7 @@ public class MarketMakerServices {
 						currentOrder.fulfillOrder(size);
 						dao.merge(bestAsk);
 						dao.merge(currentOrder);
-						
+
 						Quote quote = new Quote(price, size, currentTime);
 						quote.setAsk(price);
 						quote.setAskSize(size);
@@ -79,7 +83,7 @@ public class MarketMakerServices {
 						currentOrder.fulfillOrder(volume);
 						dao.merge(bestBid);
 						dao.merge(currentOrder);
-						
+
 						Quote quote = new Quote(price, volume, currentTime);
 						quote.setBid(price);
 						quote.setBidSize(volume);
@@ -90,7 +94,7 @@ public class MarketMakerServices {
 						currentOrder.fulfillOrder(size);
 						dao.merge(bestBid);
 						dao.merge(currentOrder);
-						
+
 						Quote quote = new Quote(price, size, currentTime);
 						quote.setBid(price);
 						quote.setBidSize(size);
@@ -100,6 +104,54 @@ public class MarketMakerServices {
 				}
 			}
 
+		}
+	}
+
+	private void handleLimitOrders() {
+
+		List<MarketOrder> limitBuys = dao.getLimitBuys();
+		List<MarketOrder> limitSells = dao.getLimitSells();
+
+		if (limitBuys.size() > 0 && limitSells.size() > 0) {
+			for (MarketOrder limitBuy : limitBuys) {
+				if (limitSells.indexOf(limitBuy) != -1) {
+					long time = new Date().getTime();
+					MarketOrder limitSell = limitSells.get(limitSells
+							.indexOf(limitBuy));
+					int price = limitBuy.getPrice();
+					int buyAmount = limitBuy.getAmount();
+					int sellAmount = limitSell.getAmount();
+
+					if (buyAmount > sellAmount) {
+						limitBuy.fulfillOrder(sellAmount);
+						limitSell.fulfillOrder(sellAmount);
+						dao.merge(limitBuy);
+						dao.merge(limitSell);
+
+						Quote quote = new Quote(price, sellAmount, time);
+						quote.setAsk(price);
+						quote.setAskSize(buyAmount);
+						quote.setBid(price);
+						quote.setBidSize(sellAmount);
+						quote.setTime(time);
+						quoteDao.persist(quote);
+					} else {
+						limitBuy.fulfillOrder(buyAmount);
+						limitSell.fulfillOrder(buyAmount);
+						dao.merge(limitBuy);
+						dao.merge(limitSell);
+
+						Quote quote = new Quote(price, buyAmount, time);
+						quote.setAsk(price);
+						quote.setAskSize(buyAmount);
+						quote.setBid(price);
+						quote.setBidSize(buyAmount);
+						quote.setTime(time);
+						quoteDao.persist(quote);
+					}
+
+				}
+			}
 		}
 	}
 
