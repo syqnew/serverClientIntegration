@@ -38,7 +38,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 
 			// make get requests to the server until Market is opened
 			if (marketYear == 0)
-				marketInterval = setInterval(checkMarketState, 900);
+				marketInterval = setInterval(checkMarketState, 500);
 
 			$('#marketBuyBtn').on("click", function(event) {
 				event.preventDefault();
