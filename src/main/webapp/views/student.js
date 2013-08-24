@@ -13,15 +13,15 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 	var marketYear = 0;
 	var marketInterval;
 	var clientId;
+	var initialTemplate = {};
+	initialTemplate["news"] = [{"new": "Market is closed."}];
 
 	var StudentView = Backbone.View.extend({
 		el : $('#loginModal'),
 		render : function(email) {
-			$('#loginModal').html(_studentTemplate({
-				email : email
-			}));
+			initialTemplate["email"] = email;
+			$('#loginModal').html(_studentTemplate(initialTemplate));
 			$('#graph').html(_graphTemplate());
-			
 
 			// get id assigned to this client
 			var clientData = "email=" + email;
