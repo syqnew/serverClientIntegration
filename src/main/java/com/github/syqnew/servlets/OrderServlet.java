@@ -25,14 +25,7 @@ public class OrderServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		response.setStatus(HttpServletResponse.SC_OK);
-
-		MarketStateDao dao = new MarketStateDaoImpl();
-		MarketState currentMarketState = dao.getCurrentMarketState();
-
-		ObjectMapper mapper = new ObjectMapper();
-
-		response.getWriter().println(
-				mapper.writeValueAsString(currentMarketState));
+		orderServices.getAllOrders(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request,

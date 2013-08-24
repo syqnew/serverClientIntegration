@@ -19,7 +19,6 @@ public class ClientServlet extends HttpServlet {
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.setContentType("text/html");
 		clientServices.getClientId(request, response);
-
 	}
 
 	protected void doPost(HttpServletRequest request,

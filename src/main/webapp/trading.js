@@ -30,6 +30,15 @@ function checkForUpdates() {
 		clearInterval(timerId);
 	}
 	
+	var ajax = $.ajax({
+		type : "GET",
+		url : "http://localhost:8080/order",
+		dataType : "json",
+		success : function(data) {
+			console.log(data);
+		}
+	});
+	
 }
 
 // TODO
