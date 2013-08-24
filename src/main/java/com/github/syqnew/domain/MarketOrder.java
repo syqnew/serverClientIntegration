@@ -7,6 +7,7 @@ import javax.persistence.Entity;
  */
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Version;
 
 @Entity
 public class MarketOrder implements BaseObject {
@@ -21,6 +22,8 @@ public class MarketOrder implements BaseObject {
 	private int price;
 	private int unfulfilled;
 	private long time;
+	@Version
+	private int version;
 
 	public MarketOrder() {
 	}
@@ -99,17 +102,22 @@ public class MarketOrder implements BaseObject {
 	public void setTime(long time) {
 		this.time = time;
 	}
-	
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
+
 	public void fulfillOrder(int size) {
 		this.unfulfilled -= size;
-		if (this.unfulfilled < 0) {
-			this.unfulfilled = 0;
+		if (this.unfulfilled == 0) {
 			this.status = 5;
-		} else if (this.unfulfilled == 0) {
-			this.status = 5;
-		} 
+		}
 	}
-	
+
 	public void cancelOrder() {
 		this.status = 10;
 	}

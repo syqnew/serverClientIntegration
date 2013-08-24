@@ -22,7 +22,7 @@ public class QuoteDaoImpl extends BaseDaoImpl<Quote> implements QuoteDao {
 				+ " order by time");
 		query.setMaxResults(1);
 		Quote quote = (Quote) query.list().get(0);
-
+		session.flush();
 		session.close();
 		return quote;
 	}

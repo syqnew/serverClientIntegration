@@ -7,27 +7,51 @@ function timer(adminn, duration, placeholderr, buttonn) {
 		button = buttonn;
 	placeholder = placeholderr;
 	timeLeft = duration * 1000 * 60;
-	timerId = setInterval(countdown, 1000);
+	if (admin)
+		timerId = setInterval(adminCountdown, 1000);
+	else
+		timerId = setInterval(traderCountdown, 1000);
 }
 
-function countdown() {
+function adminCountdown() {
 	if (timeLeft > 0) {
 		timeLeft -= 1000;
-		if (!admin) $('button').prop('disabled', false);
-	}
-	else {
+	} else {
 		clearInterval(timerId);
+		$(button).button('complete');
+		if (year == 2) {
+			$(button).remove();
+		}
+		year = 2;
+	}
+	var minutes = Math.floor(timeLeft / (60 * 1000));
+	var seconds = Math.floor((timeLeft - (minutes * 60 * 1000)) / 1000);
 
-		if (admin) {
-			$(button).button('complete');
-			if (year == 2) {
-				$(button).remove();
-			}
+	$(placeholder).html(_TimerTemplate({
+		year : year,
+		minutes : minutes,
+		seconds : seconds
+	}));
+
+	var ajax = $.ajax({
+		type : "GET",
+		url : "http://localhost:8080/marketMaker",
+		dataType : "json",
+		success : function(data) {
+			console.log(data);
 		}
-		else {
-			// disable the all the buttons
-			$('button').prop('disabled', true);
-		}
+	});
+
+}
+
+function traderCountdown() {
+	if (timeLeft > 0) {
+		timeLeft -= 1000;
+		$('button').prop('disabled', false);
+	} else {
+		clearInterval(timerId);
+		// disable the all the buttons
+		$('button').prop('disabled', true);
 		year = 2;
 	}
 

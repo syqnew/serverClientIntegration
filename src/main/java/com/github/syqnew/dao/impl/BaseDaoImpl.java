@@ -31,6 +31,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		session.beginTransaction();
 		session.save(type.getName(), BaseObject);
 		session.getTransaction().commit();
+		session.flush();
 		session.close();
 	}
 
@@ -40,6 +41,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		session.beginTransaction();
 		session.merge(type.getName(), BaseObject);
 		session.getTransaction().commit();
+		session.flush();
 		session.close();
 	}
 
@@ -49,6 +51,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		session.beginTransaction();
 		session.delete(type.getName(), BaseObject);
 		session.getTransaction().commit();
+		session.flush();
 		session.close();
 	}
 

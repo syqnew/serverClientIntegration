@@ -1,7 +1,5 @@
 package com.github.syqnew.dao.impl;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -27,7 +25,7 @@ public class MarketOrderDaoImpl extends BaseDaoImpl<MarketOrder> implements
 				+ " WHERE client = :client");
 		query.setParameter("client", client);
 		List<MarketOrder> orders = query.list();
-
+		session.flush();
 		session.close();
 		return orders;
 	}
@@ -37,9 +35,9 @@ public class MarketOrderDaoImpl extends BaseDaoImpl<MarketOrder> implements
 		Session session = sf.openSession();
 
 		Query query = session.createQuery("FROM " + MarketOrder.class.getName()
-				+ " WHERE orderType = 3 and status = 0 ORDER BY price DESC");
+				+ " WHERE status = 0 AND orderType = 3 ORDER BY price DESC");
 		List<MarketOrder> orders = query.list();
-		
+		session.flush();
 		session.close();
 		return orders;
 	}
@@ -49,26 +47,25 @@ public class MarketOrderDaoImpl extends BaseDaoImpl<MarketOrder> implements
 		Session session = sf.openSession();
 
 		Query query = session.createQuery("FROM " + MarketOrder.class.getName()
-				+ " WHERE orderType = 4 and status = 0 ORDER BY price ASC");
+				+ " WHERE status = 0 AND orderType = 4 ORDER BY price ASC");
 		List<MarketOrder> orders = query.list();
-		
+		session.flush();
 		session.close();
 		return orders;
 	}
-	
+
 	public List<MarketOrder> getMarketOrders() {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 
-		Query query = session.createQuery("FROM " + MarketOrder.class.getName()
-				+ " WHERE orderType = 1 OR orderType = 2 and status = 0 ORDER BY time ASC");
+		Query query = session
+				.createQuery("FROM "
+						+ MarketOrder.class.getName()
+						+ " WHERE status = 0 AND orderType = 1 OR orderType = 2 ORDER BY time ASC");
 		List<MarketOrder> orders = query.list();
-		
+		session.flush();
 		session.close();
 		return orders;
 	}
-
-
-
 
 }
