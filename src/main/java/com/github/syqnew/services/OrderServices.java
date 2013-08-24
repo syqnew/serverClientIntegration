@@ -17,14 +17,17 @@ import com.github.syqnew.dao.impl.MarketOrderDaoImpl;
 import com.github.syqnew.domain.MarketOrder;
 
 public class OrderServices {
+	
+	MarketOrderDao dao;
 
-	public OrderServices(){}
+	public OrderServices(){
+		dao = new MarketOrderDaoImpl();
+	}
 
 	public void getMyOrders(String clientId, HttpServletRequest request,
 			HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		List<String> list = new ArrayList<String>();
-		MarketOrderDao dao = new MarketOrderDaoImpl();
 		int clientID = Integer.parseInt(clientId);
 		List<MarketOrder> marketOrders = dao.getByClient(clientID);
 		for (MarketOrder order : marketOrders ) {
@@ -37,7 +40,6 @@ public class OrderServices {
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		MarketOrder order = mapper.readValue(request.getReader(), MarketOrder.class);
-		MarketOrderDao dao = new MarketOrderDaoImpl();
 		dao.merge(order);
 	}
 

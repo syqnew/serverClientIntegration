@@ -15,15 +15,16 @@ import com.github.syqnew.dao.impl.MarketStateDaoImpl;
 import com.github.syqnew.domain.MarketState;
 
 public class AdminServices {
+	
+	MarketStateDao dao;
 
 	public AdminServices() {
-	};
+		dao = new MarketStateDaoImpl();
+	}
 
 	public void getCurrentYear(HttpServletRequest request,
 			HttpServletResponse response) throws JsonGenerationException,
 			JsonMappingException, IOException {
-
-		MarketStateDao dao = new MarketStateDaoImpl();
 		MarketState currentMarketState = dao.getCurrentMarketState();
 		ObjectMapper mapper = new ObjectMapper();
 		response.getWriter().println(
@@ -35,7 +36,6 @@ public class AdminServices {
 		ObjectMapper mapper = new ObjectMapper();
 		MarketState marketState = mapper.readValue(request.getReader(),
 				MarketState.class);
-		MarketStateDao dao = new MarketStateDaoImpl();
 		dao.persist(marketState);
 	}
 

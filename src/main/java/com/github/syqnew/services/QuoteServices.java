@@ -14,22 +14,26 @@ import com.github.syqnew.dao.impl.QuoteDaoImpl;
 import com.github.syqnew.domain.Quote;
 
 public class QuoteServices {
-	
-	public QuoteServices() {}
-	
+
+	QuoteDao dao;
+
+	public QuoteServices() {
+		dao = new QuoteDaoImpl();
+	}
+
 	public void getLastQuote(HttpServletRequest request,
-			HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException {
-		QuoteDao dao = new QuoteDaoImpl();
+			HttpServletResponse response) throws JsonGenerationException,
+			JsonMappingException, IOException {
 		Quote quote = dao.getLastQuote();
-		
+
 		ObjectMapper mapper = new ObjectMapper();
 		response.getWriter().println(mapper.writeValueAsString(quote));
 	}
-	
+
 	public void insertQuote(HttpServletRequest request,
-	HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException {
-		QuoteDao dao = new QuoteDaoImpl();
-		
+			HttpServletResponse response) throws JsonGenerationException,
+			JsonMappingException, IOException {
+
 		ObjectMapper mapper = new ObjectMapper();
 		Quote quote = mapper.readValue(request.getReader(), Quote.class);
 		dao.persist(quote);

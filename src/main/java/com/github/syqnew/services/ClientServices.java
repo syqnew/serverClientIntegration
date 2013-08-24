@@ -15,12 +15,14 @@ import com.github.syqnew.domain.Client;
 
 public class ClientServices {
 
+	private ClientDao dao; 
+	
 	public ClientServices() {
+		dao = new ClientDaoImpl();
 	}
 
 	public void getClientId(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		ClientDao dao = new ClientDaoImpl();
 		Client client = dao.findByEmail(request.getParameter("email"));
 		response.getWriter().println(client.getId());
 	}
@@ -28,7 +30,7 @@ public class ClientServices {
 	public void insertClient(HttpServletRequest request) throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		Client client = mapper.readValue(request.getReader(), Client.class);
-		ClientDao dao = new ClientDaoImpl();
+		dao = new ClientDaoImpl();
 		dao.persist(client);
 	}
 
