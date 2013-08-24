@@ -24,7 +24,8 @@ public class ClientServices {
 	public void getClientId(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		Client client = dao.findByEmail(request.getParameter("email"));
-		response.getWriter().println(client.getId());
+		ObjectMapper mapper = new ObjectMapper();
+		response.getWriter().println(mapper.writeValueAsString(client));
 	}
 
 	public void insertClient(HttpServletRequest request) throws JsonParseException, JsonMappingException, IOException {

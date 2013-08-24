@@ -29,10 +29,11 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 				type : "GET",
 				url : "http://localhost:8080/client",
 				data : clientData,
-				dataType : "html",
+				dataType : "json",
 				success : function(data) {
+					console.log(data);
 					if (data)
-						clientId = data;
+						clientId = data["id"];
 							if (marketYear == 0)
 								marketInterval = setInterval(checkMarketState,
 										500);
