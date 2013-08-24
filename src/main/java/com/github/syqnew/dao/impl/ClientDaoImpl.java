@@ -15,7 +15,6 @@ public class ClientDaoImpl extends BaseDaoImpl<Client> implements ClientDao {
 	}
 
 	public Client findByEmail(String email) {
-		// TODO Auto-generated method stub
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 		

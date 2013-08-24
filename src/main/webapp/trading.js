@@ -7,8 +7,18 @@ function tradingOpen(duration, clientIdd) {
 	timeLeft = duration * 1000 * 60;
 	timerId = setInterval(checkForUpdates, 500);
 	var orders = {};
-	orders["orders"] = ["Order 1", "Order 2"];
+	orders["orders"] = [{order: "Order 1", id: "order1Button"},
+	                    {order: "Order 2", id: "order2Button"}];
 	$('#openOrders').html(_openOrdersTemplate(orders));
+	
+	$('#order1Button').on("click", function(event) {
+		event.preventDefault();
+		console.log("order 1 was clicked");
+	});
+	$('#order2Button').on("click", function(event) {
+		event.preventDefault();
+		console.log("order 2 was clicked");
+	});
 
 }
 
@@ -19,5 +29,10 @@ function checkForUpdates() {
 	else {
 		clearInterval(timerId);
 	}
+	
+}
+
+// TODO
+function createListenersCancel () {
 	
 }

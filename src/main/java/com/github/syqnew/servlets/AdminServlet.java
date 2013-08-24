@@ -39,13 +39,8 @@ public class AdminServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		response.setStatus(HttpServletResponse.SC_OK);
-//		adminServices.updateMarketState(request);
-		ObjectMapper mapper = new ObjectMapper();
-		MarketState marketState = mapper.readValue(request.getReader(), MarketState.class);
-
-		MarketStateDao dao = new MarketStateDaoImpl();
-		dao.persist(marketState);
-		response.getWriter().println("POST");
+		adminServices = new AdminServices();
+		adminServices.updateMarketState(request);
 	}
 
 }

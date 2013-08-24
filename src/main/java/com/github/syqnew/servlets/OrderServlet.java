@@ -42,7 +42,7 @@ public class OrderServlet extends HttpServlet {
 				MarketOrder.class);
 
 		MarketOrderDao dao = new MarketOrderDaoImpl();
-		dao.persist(order);
+		dao.merge(order);
 		response.getWriter().println("POST");
 	}
 

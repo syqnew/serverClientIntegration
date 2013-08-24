@@ -21,6 +21,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 				email : email
 			}));
 			$('#graph').html(_graphTemplate());
+			
 
 			// get id assigned to this client
 			var clientData = "email=" + email;
