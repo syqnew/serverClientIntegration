@@ -25,7 +25,8 @@ public class OrderServices {
 		ObjectMapper mapper = new ObjectMapper();
 		List<String> list = new ArrayList<String>();
 		MarketOrderDao dao = new MarketOrderDaoImpl();
-		List<MarketOrder> marketOrders = dao.getByClient(Integer.parseInt(clientId));
+		int clientID = Integer.parseInt(clientId);
+		List<MarketOrder> marketOrders = dao.getByClient(clientID);
 		for (MarketOrder order : marketOrders ) {
 			list.add(mapper.writeValueAsString(order));
 		}

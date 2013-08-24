@@ -30,9 +30,12 @@ function checkForUpdates() {
 		clearInterval(timerId);
 	}
 	
+	var requestStr = "clientId=" + clientId;
+	
 	var ajax = $.ajax({
 		type : "GET",
 		url : "http://localhost:8080/order",
+		data : requestStr, 
 		dataType : "json",
 		success : function(data) {
 			console.log(data);

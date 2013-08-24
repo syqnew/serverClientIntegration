@@ -33,12 +33,13 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 				success : function(data) {
 					if (data)
 						clientId = data;
+							if (marketYear == 0)
+								marketInterval = setInterval(checkMarketState,
+										500);
 				}
 			});
 
 			// make get requests to the server until Market is opened
-			if (marketYear == 0)
-				marketInterval = setInterval(checkMarketState, 500);
 
 			$('#marketBuyBtn').on("click", function(event) {
 				event.preventDefault();
