@@ -19,13 +19,13 @@ import com.github.syqnew.domain.MarketOrder;
 public class OrderServices {
 
 	public OrderServices(){}
-	
-	public void getAllOrders(HttpServletRequest request,
+
+	public void getMyOrders(String clientId, HttpServletRequest request,
 			HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		List<String> list = new ArrayList<String>();
 		MarketOrderDao dao = new MarketOrderDaoImpl();
-		List<MarketOrder> marketOrders = dao.findAll();
+		List<MarketOrder> marketOrders = dao.getByClient(Integer.parseInt(clientId));
 		for (MarketOrder order : marketOrders ) {
 			list.add(mapper.writeValueAsString(order));
 		}

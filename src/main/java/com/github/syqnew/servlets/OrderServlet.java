@@ -18,14 +18,15 @@ import com.github.syqnew.domain.MarketState;
 import com.github.syqnew.services.OrderServices;
 
 public class OrderServlet extends HttpServlet {
-	
+
 	OrderServices orderServices = new OrderServices();
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		response.setStatus(HttpServletResponse.SC_OK);
-		orderServices.getAllOrders(request, response);
+		orderServices.getMyOrders(request.getParameter("clientId"), request,
+				response);
 	}
 
 	protected void doPost(HttpServletRequest request,
