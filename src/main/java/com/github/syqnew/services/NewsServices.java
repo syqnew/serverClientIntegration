@@ -26,22 +26,20 @@ public class NewsServices {
 
 	public void getNews(HttpServletRequest request, HttpServletResponse response)
 			throws JsonGenerationException, JsonMappingException, IOException {
-
-		List<String> list = new ArrayList<String>();
-
+		String idStr = request.getParameter("id");
+		int id = Integer.parseInt(idStr);
+		News news = dao.getById(id);
+		
 		ObjectMapper mapper = new ObjectMapper();
-		List<News> news = dao.findAll();
-		for (News newss : news) {
-			list.add(mapper.writeValueAsString(newss));
-		}
-		response.getWriter().println(list);
+		response.getWriter().println(mapper.writeValueAsString(news));
 	}
 
 	public void insertNews(HttpServletRequest request,
 			HttpServletResponse response) throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		News news = mapper.readValue(request.getReader(), News.class);
-		dao.persist(news);
+		News[] news = mapper.readValue(request.getReader(), News[].class);
+		for (News newz : news) {
+			dao.persist(newz);
+		}
 	}
-
 }

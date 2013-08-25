@@ -1,10 +1,8 @@
-<table class="table table-condensed">
+<table class="table table-condensed" id="openOrdersTable">
 	{{#each orders}}
 	<tr>
-		<td>{{order}}</td>
-		<td>
-			<button id={{id}} class="btn btn-warning" type="button">Cancel</button>
-		</td>
+		<td>{{order}}<td>
+		<td><button class="btn btn-warning" id={{id}}>Cancel</button></td>
 	</tr>
 	{{/each}}
 </table>

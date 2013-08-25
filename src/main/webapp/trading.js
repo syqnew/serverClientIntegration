@@ -1,50 +1,55 @@
-var timerId, timeLeft, clientId;
+var timerId, timeLeft, clientId, temp;
+var timeInterval = 1500;
 
 function tradingOpen(duration, clientIdd) {
-	
-	clientId = clientIdd;
-	
-	timeLeft = duration * 1000 * 60;
-	timerId = setInterval(checkForUpdates, 500);
-	var orders = {};
-	orders["orders"] = [{order: "Order 1", id: "order1Button"},
-	                    {order: "Order 2", id: "order2Button"}];
-	$('#openOrders').html(_openOrdersTemplate(orders));
-	
-	$('#order1Button').on("click", function(event) {
-		event.preventDefault();
-		console.log("order 1 was clicked");
-	});
-	$('#order2Button').on("click", function(event) {
-		event.preventDefault();
-		console.log("order 2 was clicked");
-	});
 
+	clientId = clientIdd;
+	timeLeft = duration * 1000 * 60;
+	timerId = setInterval(checkForUpdates, timeInterval);
 }
 
 function checkForUpdates() {
 	if (timeLeft > 0) {
-		timeLeft -= 500;
-	}
-	else {
+		timeLeft -= timeInterval;
+	} else {
 		clearInterval(timerId);
 	}
-	
+
 	var requestStr = "clientId=" + clientId;
-	
+
 	var ajax = $.ajax({
 		type : "GET",
 		url : "http://localhost:8080/order",
-		data : requestStr, 
+		data : requestStr,
 		dataType : "json",
 		success : function(data) {
-			console.log(data);
+			if (data) {
+
+				var orders = {};
+				var ordersList = [];
+				for ( var ct = 0; ct < data.length; ct++) {
+					var temp = {};
+					temp["id"] = data[ct]["id"];
+					if (data[ct]["orderType"] == 1)
+						temp["order"] = "Buy " + data[ct]["unfulfilled"]
+								+ " shares";
+					else if (data[ct]["orderType"] == 2)
+						temp["order"] = "Sell " + data[ct]["unfulfilled"]
+								+ " shares";
+					else if (data[ct]["orderType"] == 3)
+						temp["order"] = "Buy " + data[ct]["unfulfilled"]
+								+ " shares at " + data[ct]["price"];
+					else
+						temp["order"] = "Sell " + data[ct]["unfulfilled"]
+								+ " shares at " + data[ct]["price"];
+					
+					ordersList.push(temp);
+				}
+				orders["orders"] = ordersList;
+				console.log(orders);
+				$('#openOrders').html(_openOrdersTemplate(orders));
+			}
 		}
 	});
-	
-}
 
-// TODO
-function createListenersCancel () {
-	
 }

@@ -7,20 +7,10 @@
 	<div class="span1"></div>
   	
   	<div class="span5">
-		
-		<table class="table table-condensed" id="marketNews">
-			<tr>
-				<th>Market News</th>
-			</tr>
-			{{#each news}}
-			<tr>
-				<td>{{new}}</th>
-			</tr>
-			{{/each}}
-		</table>
   	
-  		<div id="studentTimer">
-  		</div>
+  		<div id="marketNews"></div>
+		
+  		<div id="studentTimer"></div>
   		
   		<div id="graph"></div>
   		

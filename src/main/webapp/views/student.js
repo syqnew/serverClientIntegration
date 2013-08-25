@@ -1,20 +1,24 @@
 define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 		'text!templates/student.template', 'text!templates/graph.template',
-		'text!templates/timer.template', 'text!templates/openOrders.template', 
-		'../timer', '../flotGraph', '../trading',
-		'flotTime', 'bootstrap' ], function(App, $, _, Backbone, Handlebars,
-		flot, studentTemplate, graphTemplate, timerTemplate, openOrdersTemplate) {
+		'text!templates/timer.template', 'text!templates/openOrders.template',
+		'text!templates/news.template', '../timer', '../flotGraph',
+		'../trading', 'flotTime', 'bootstrap' ], function(App, $, _, Backbone,
+		Handlebars, flot, studentTemplate, graphTemplate, timerTemplate,
+		openOrdersTemplate, newsTemplate) {
 
 	_studentTemplate = Handlebars.compile(studentTemplate);
 	_graphTemplate = Handlebars.compile(graphTemplate);
 	_timerTemplate = Handlebars.compile(timerTemplate);
 	_openOrdersTemplate = Handlebars.compile(openOrdersTemplate);
+	_newsTemplate = Handlebars.compile(newsTemplate);
 
 	var marketYear = 0;
 	var marketInterval;
 	var clientId;
 	var initialTemplate = {};
-	initialTemplate["news"] = [{"new": "Market is closed."}];
+	initialTemplate["news"] = [ {
+		"new" : "Market is closed."
+	} ];
 
 	var StudentView = Backbone.View.extend({
 		el : $('#loginModal'),
@@ -22,7 +26,13 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 			initialTemplate["email"] = email;
 			$('#loginModal').html(_studentTemplate(initialTemplate));
 			$('#graph').html(_graphTemplate());
-
+			$('#marketNews').html(_newsTemplate({
+				"news" : [ {
+					"new" : "Market is closed"
+				} ]
+			}));
+			$('button').prop('disabled', true);
+			
 			// get id assigned to this client
 			var clientData = "email=" + email;
 			var ajax = $.ajax({
@@ -34,13 +44,12 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 					console.log(data);
 					if (data)
 						clientId = data["id"];
-							if (marketYear == 0)
-								marketInterval = setInterval(checkMarketState,
-										500);
+					if (marketYear == 0)
+						// make get requests to the server until Market
+						// is opened
+						marketInterval = setInterval(checkMarketState, 500);
 				}
 			});
-
-			// make get requests to the server until Market is opened
 
 			$('#marketBuyBtn').on("click", function(event) {
 				event.preventDefault();
@@ -153,9 +162,15 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 			dataType : "json",
 			success : function(data) {
 				if (data["year"] > 0) {
+					$('#marketNews').html(_newsTemplate({
+						"news" : [ {
+							"new" : "Market is open"
+						} ]
+					}));
+					$('button').prop('disabled', false);
 					marketYear = data["year"];
 					clearInterval(marketInterval);
-					timer(false, data["duration"], '#studentTimer');
+					timer(false, data["duration"], '#studentTimer', 'dummyVariable', clientId);
 					tradingOpen(data["duration"], clientId);
 				}
 			}

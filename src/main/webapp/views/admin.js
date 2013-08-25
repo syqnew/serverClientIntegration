@@ -34,7 +34,9 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 					});
 
 					function insertMessages(event1, event2) {
-						var messages = [];
+						var stage0 = [];
+						var stage1 = [];
+						var stage2 = [];
 						var state = [];
 						if (event1.substring(0,1) == "X") state.push(0);
 						if (event1.substring(0,1) == "Y") state.push(1);
@@ -55,24 +57,25 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 								temp1["message"] = "NOT " + stateStr1[s1]
 										+ " in Year 1 and NOT " + stateStr2[s2]
 										+ " in Year 2";
-								messages.push(temp1);
+								stage0.push(temp1);
 								var temp2 = {};
 								temp2["message"] = stateStr1[state[0]]
 										+ " in Year 1 and NOT " + stateStr2[s2]
 										+ " in Year 2";
-								messages.push(temp2);
+								stage1.push(temp2);
 								var temp3 = {};
 								temp3["message"] = stateStr1[state[0]]
 										+ " in Year 1 and "
 										+ stateStr2[state[1]] + " in Year 2";
-								messages.push(temp3);
+								stage2.push(temp3);
 							}
 						}
+						
 
 						var ajax = $.ajax({
 							type : "POST",
 							url : "http://localhost:8080/news",
-							data : JSON.stringify(messages),
+							data : JSON.stringify(stage0.concat(stage1, stage2)),
 							dataType : "json"
 						});
 					}

@@ -110,7 +110,7 @@ public class MarketOrder implements BaseObject {
 	public void setVersion(int version) {
 		this.version = version;
 	}
-
+	
 	public void fulfillOrder(int size) {
 		this.unfulfilled -= size;
 		if (this.unfulfilled == 0) {

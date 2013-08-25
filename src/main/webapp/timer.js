@@ -1,7 +1,7 @@
 var timerId, timeLeft, placeholder, button, admin;
 var year = 1;
 
-function timer(adminn, duration, placeholderr, buttonn) {
+function timer(adminn, duration, placeholderr, buttonn, clientId) {
 	admin = adminn;
 	if (buttonn)
 		button = buttonn;
@@ -9,8 +9,26 @@ function timer(adminn, duration, placeholderr, buttonn) {
 	timeLeft = duration * 1000 * 60;
 	if (admin)
 		timerId = setInterval(adminCountdown, 1000);
-	else
+	else {
+		var requestString = "id=" + (clientId % 4);
+		var ajax = $.ajax({
+			type : "GET",
+			url : "http://localhost:8080/news",
+			data : requestString,
+			dataType : "json",
+			success : function(data) {
+				var temp = data["message"];
+				$('#marketNews').html(_newsTemplate({
+					"news" : [ {
+						"new" : temp
+					} ]
+				}));
+			}
+		});
 		timerId = setInterval(traderCountdown, 1000);
+		
+		
+	}
 }
 
 function adminCountdown() {
