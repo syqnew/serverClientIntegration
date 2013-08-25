@@ -34,14 +34,14 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 					data : JSON.stringify(data),
 					dataType : "json",
 					success : function(data) {
-						console.log(data);
 					}
 				});
-				timer(true, duration, '#timer', '#startPeriodButton');
+
+				timer(true, duration, '#timer', '#startPeriodButton', event1, event2);
 			});
-			
+
 			function MarketMaker() {
-				
+
 			}
 		}
 	});
