@@ -26,12 +26,56 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 							data : JSON.stringify(data),
 							dataType : "json",
 							success : function(data) {
-								console.log(data);
 							}
 						});
+						insertMessages(event1, event2);
 						var marketSessionView = new MarketSessionView();
 						marketSessionView.render(event1, event2, duration);
 					});
+
+					function insertMessages(event1, event2) {
+						var messages = [];
+						var state = [];
+						if (event1.substring(0,1) == "X") state.push(0);
+						if (event1.substring(0,1) == "Y") state.push(1);
+						if (event1.substring(0,1) == "Z") state.push(2);
+						if (event2.substring(0,1) == "X") state.push(0);
+						if (event2.substring(0,1) == "Y") state.push(1);
+						if (event2.substring(0,1) == "X")state.push(2);
+						var stateStr1 = [ "X", "Y", "Z" ];
+						var stateStr2 = [ "X", "Y", "Z" ];
+
+						for ( var s1 = 0; s1 < 3; s1++) {
+							for ( var s2 = 0; s2 < 3; s2++) {
+								if (s1 == state[0])
+									continue;
+								if (s2 == state[1])
+									continue;
+								var temp1 = {};
+								temp1["message"] = "NOT " + stateStr1[s1]
+										+ " in Year 1 and NOT " + stateStr2[s2]
+										+ " in Year 2";
+								messages.push(temp1);
+								var temp2 = {};
+								temp2["message"] = stateStr1[state[0]]
+										+ " in Year 1 and NOT " + stateStr2[s2]
+										+ " in Year 2";
+								messages.push(temp2);
+								var temp3 = {};
+								temp3["message"] = stateStr1[state[0]]
+										+ " in Year 1 and "
+										+ stateStr2[state[1]] + " in Year 2";
+								messages.push(temp3);
+							}
+						}
+
+						var ajax = $.ajax({
+							type : "POST",
+							url : "http://localhost:8080/news",
+							data : JSON.stringify(messages),
+							dataType : "json"
+						});
+					}
 				}
 			});
 			return AdminView;
