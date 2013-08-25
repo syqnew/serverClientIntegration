@@ -43,7 +43,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 						if (event1.substring(0,1) == "Z") state.push(2);
 						if (event2.substring(0,1) == "X") state.push(0);
 						if (event2.substring(0,1) == "Y") state.push(1);
-						if (event2.substring(0,1) == "X")state.push(2);
+						if (event2.substring(0,1) == "Z")state.push(2);
 						var stateStr1 = [ "X", "Y", "Z" ];
 						var stateStr2 = [ "X", "Y", "Z" ];
 

@@ -29,7 +29,6 @@ require
 					deps : [ "jquery", "flot" ],
 					exports : 'flotTime'
 				}
-
 			}
 		});
 

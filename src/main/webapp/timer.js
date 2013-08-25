@@ -1,85 +1,62 @@
-var timerId, timeLeft, placeholder, button, admin;
+var timerId, timerStage2Id, timeLeft, timeStage2Left, placeholder, button, temp, durationOriginal;
 var year = 1;
 
-function timer(adminn, duration, placeholderr, buttonn, clientId) {
-	admin = adminn;
-	if (buttonn)
-		button = buttonn;
-	placeholder = placeholderr;
-	timeLeft = duration * 1000 * 60;
-	if (admin)
-		timerId = setInterval(adminCountdown, 1000);
-	else {
-		var requestString = "id=" + (clientId % 4);
+function TraderTimer() {
+}
+TraderTimer.prototype.countdown = function(duration, placeholder) {
+	$('button').prop('disabled', false);
+	var timeLeft = duration * 60 * 1000;
+	var timerId = setInterval(function() {
+		if (timeLeft > 0) {
+			timeLeft -= 1000;
+		} else {
+			clearInterval(timerId);
+			$('button').prop('disabled', true);
+			year = 2;
+		}
+
+		var minutes = Math.floor(timeLeft / (60 * 1000));
+		var seconds = Math.floor((timeLeft - (minutes * 60 * 1000)) / 1000);
+
+		$(placeholder).html(_TimerTemplate({
+			year : year,
+			minutes : minutes,
+			seconds : seconds
+		}));
+	}, 1000);
+}
+
+function AdminTimer() {
+}
+AdminTimer.prototype.countdown = function(duration, placeholder, button) {
+	var timeLeft = duration * 1000 * 60;
+	timerId = setInterval(function() {
+		if (timeLeft > 0) {
+			timeLeft -= 1000;
+		} else {
+			clearInterval(timerId);
+			$(button).button('complete');
+			if (year == 2) {
+				$(button).remove();
+			}
+			year = 2;
+		}
+		var minutes = Math.floor(timeLeft / (60 * 1000));
+		var seconds = Math.floor((timeLeft - (minutes * 60 * 1000)) / 1000);
+		
+		$(placeholder).html(_TimerTemplate({
+			year : year,
+			minutes : minutes,
+			seconds : seconds
+		}));
+		
 		var ajax = $.ajax({
 			type : "GET",
-			url : "http://localhost:8080/news",
-			data : requestString,
+			url : "http://localhost:8080/marketMaker",
 			dataType : "json",
 			success : function(data) {
-				var temp = data["message"];
-				$('#marketNews').html(_newsTemplate({
-					"news" : [ {
-						"new" : temp
-					} ]
-				}));
+				console.log(data);
 			}
 		});
-		timerId = setInterval(traderCountdown, 1000);
-		
-		
-	}
-}
-
-function adminCountdown() {
-	if (timeLeft > 0) {
-		timeLeft -= 1000;
-	} else {
-		clearInterval(timerId);
-		$(button).button('complete');
-		if (year == 2) {
-			$(button).remove();
-		}
-		year = 2;
-	}
-	var minutes = Math.floor(timeLeft / (60 * 1000));
-	var seconds = Math.floor((timeLeft - (minutes * 60 * 1000)) / 1000);
-
-	$(placeholder).html(_TimerTemplate({
-		year : year,
-		minutes : minutes,
-		seconds : seconds
-	}));
-
-	var ajax = $.ajax({
-		type : "GET",
-		url : "http://localhost:8080/marketMaker",
-		dataType : "json",
-		success : function(data) {
-			console.log(data);
-		}
-	});
-
-}
-
-function traderCountdown() {
-	if (timeLeft > 0) {
-		timeLeft -= 1000;
-		$('button').prop('disabled', false);
-	} else {
-		clearInterval(timerId);
-		// disable the all the buttons
-		$('button').prop('disabled', true);
-		year = 2;
-	}
-
-	var minutes = Math.floor(timeLeft / (60 * 1000));
-	var seconds = Math.floor((timeLeft - (minutes * 60 * 1000)) / 1000);
-
-	$(placeholder).html(_TimerTemplate({
-		year : year,
-		minutes : minutes,
-		seconds : seconds
-	}));
-
+	}, 1000);
 }

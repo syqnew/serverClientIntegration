@@ -36,8 +36,9 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 					success : function(data) {
 					}
 				});
-
-				timer(true, duration, '#timer', '#startPeriodButton');
+				
+				var timer = new AdminTimer();
+				timer.countdown(duration, '#timer', '#startPeriodButton');
 			});
 
 			function MarketMaker() {

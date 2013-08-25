@@ -1,7 +1,7 @@
 define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 		'text!templates/student.template', 'text!templates/graph.template',
 		'text!templates/timer.template', 'text!templates/openOrders.template',
-		'text!templates/news.template', '../timer', '../flotGraph',
+		'text!templates/news.template', '../timer', '../news', '../flotGraph',
 		'../trading', 'flotTime', 'bootstrap' ], function(App, $, _, Backbone,
 		Handlebars, flot, studentTemplate, graphTemplate, timerTemplate,
 		openOrdersTemplate, newsTemplate) {
@@ -13,8 +13,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 	_newsTemplate = Handlebars.compile(newsTemplate);
 
 	var marketYear = 0;
-	var marketInterval;
-	var clientId;
+	var marketInterval, clientId, news;
 	var initialTemplate = {};
 	initialTemplate["news"] = [ {
 		"new" : "Market is closed."
@@ -161,7 +160,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 			url : "http://localhost:8080/admin",
 			dataType : "json",
 			success : function(data) {
-				if (data["year"] > 0) {
+				if (data["year"] == 1 && marketYear == 0) {
 					$('#marketNews').html(_newsTemplate({
 						"news" : [ {
 							"new" : "Market is open"
@@ -169,10 +168,19 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 					}));
 					$('button').prop('disabled', false);
 					marketYear = data["year"];
-					clearInterval(marketInterval);
-					timer(false, data["duration"], '#studentTimer', 'dummyVariable', clientId);
+					news = new News(data["duration"], clientId);
+					news.getStage1News();
+					var timer = new TraderTimer();
+					timer.countdown(data["duration"], '#studentTimer');
 					tradingOpen(data["duration"], clientId);
 				}
+				else if (data["year"] == 2 && marketYear == 1) {
+					clearInterval(marketInterval);
+					marketYear = data["year"];
+					news.getStage2News();
+					var timer = new TraderTimer();
+					timer.countdown(data["duration"], '#studentTimer');
+				} 
 			}
 		});
 	}
