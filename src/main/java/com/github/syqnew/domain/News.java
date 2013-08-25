@@ -11,7 +11,6 @@ public class News implements BaseObject {
 	@GeneratedValue
 	private int id;
 	private String message;
-	private long time;
 
 	public News() {
 	}
@@ -34,14 +33,6 @@ public class News implements BaseObject {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	public long getTime() {
-		return time;
-	}
-
-	public void setTime(long time) {
-		this.time = time;
 	}
 
 }
