@@ -56,4 +56,13 @@
 		<servlet-name>NewsServlet</servlet-name>
 		<url-pattern>/news/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>QuoteServlet</servlet-name>
+		<servlet-class>com.github.syqnew.servlets.QuoteServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>QuoteServlet</servlet-name>
+		<url-pattern>/quote/*</url-pattern>
+	</servlet-mapping>
 </web-app>

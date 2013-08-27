@@ -1,6 +1,7 @@
 package com.github.syqnew.services;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,10 +22,10 @@ public class QuoteServices {
 		dao = new QuoteDaoImpl();
 	}
 
-	public void getLastQuote(HttpServletRequest request,
+	public void getAllQuotes(HttpServletRequest request,
 			HttpServletResponse response) throws JsonGenerationException,
 			JsonMappingException, IOException {
-		Quote quote = dao.getLastQuote();
+		List<Quote> quote = dao.findAll();
 
 		ObjectMapper mapper = new ObjectMapper();
 		response.getWriter().println(mapper.writeValueAsString(quote));

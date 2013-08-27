@@ -47,6 +47,7 @@ News.prototype.getStage1News = function() {
 }
 
 News.prototype.getStage2News = function() {
+	console.log("this.temp " + this.temp);
 	var outer = {};
 	var inner1 = {"new": "Market is open"};
 	var inner2 = {};

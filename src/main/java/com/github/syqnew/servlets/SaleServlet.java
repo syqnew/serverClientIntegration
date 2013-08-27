@@ -7,24 +7,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.github.syqnew.services.QuoteServices;
+import com.github.syqnew.services.SaleServices;
 
-public class QuoteServlet extends HttpServlet {
+public class SaleServlet extends HttpServlet {
 	
-	QuoteServices quoteServices = new QuoteServices();
+	SaleServices saleServices = new SaleServices();
 	
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		response.setStatus(HttpServletResponse.SC_OK);
-		quoteServices.getAllQuotes(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		response.setStatus(HttpServletResponse.SC_OK);
-		quoteServices.insertQuote(request, response);
 	}
 
 }

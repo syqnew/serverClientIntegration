@@ -1,5 +1,5 @@
 var timerId, timeLeft, clientId, temp;
-var timeInterval = 1500;
+var timeInterval = 2000;
 
 function tradingOpen(duration, clientIdd) {
 
@@ -32,16 +32,16 @@ function checkForUpdates() {
 					temp["id"] = data[ct]["id"];
 					if (data[ct]["orderType"] == 1)
 						temp["order"] = "Buy " + data[ct]["unfulfilled"]
-								+ " shares";
+								+ " shares at Market Price";
 					else if (data[ct]["orderType"] == 2)
 						temp["order"] = "Sell " + data[ct]["unfulfilled"]
-								+ " shares";
+								+ " shares at Market Price";
 					else if (data[ct]["orderType"] == 3)
 						temp["order"] = "Buy " + data[ct]["unfulfilled"]
-								+ " shares at " + data[ct]["price"];
+								+ " shares at $" + data[ct]["price"];
 					else
 						temp["order"] = "Sell " + data[ct]["unfulfilled"]
-								+ " shares at " + data[ct]["price"];
+								+ " shares at $" + data[ct]["price"];
 					
 					ordersList.push(temp);
 				}

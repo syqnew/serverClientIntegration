@@ -39,8 +39,8 @@ public class MarketMakerServices {
 	private synchronized void updateQuote() {
 		List<MarketOrder> sellList = dao.getLimitSells();
 		List<MarketOrder> buyList = dao.getLimitBuys();
+		if (sellList.size() == 0 && buyList.size() == 0) return;
 		long currentTime = new Date().getTime();
-
 		Quote quote = new Quote(currentTime);
 		if (sellList.size() > 0) {
 			MarketOrder sell = sellList.get(0);
