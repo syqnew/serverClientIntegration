@@ -14,6 +14,7 @@ import com.github.syqnew.dao.impl.SaleDaoImpl;
 import com.github.syqnew.domain.Client;
 import com.github.syqnew.domain.MarketOrder;
 import com.github.syqnew.domain.Quote;
+import com.github.syqnew.domain.Sale;
 
 public class MarketMakerServices {
 
@@ -30,8 +31,28 @@ public class MarketMakerServices {
 	}
 
 	public void handleOrders() {
+		updateQuote();
 		handleMarketOrders();
 		handleLimitOrders();
+	}
+
+	private synchronized void updateQuote() {
+		List<MarketOrder> sellList = dao.getLimitSells();
+		List<MarketOrder> buyList = dao.getLimitBuys();
+		long currentTime = new Date().getTime();
+
+		Quote quote = new Quote(currentTime);
+		if (sellList.size() > 0) {
+			MarketOrder sell = sellList.get(0);
+			quote.setAsk(sell.getPrice());
+			quote.setAskSize(sell.getUnfulfilled());
+		}
+		if (buyList.size() > 0) {
+			MarketOrder buy = buyList.get(0);
+			quote.setBid(buy.getPrice());
+			quote.setBidSize(buy.getAmount());
+		}
+		quoteDao.persist(quote);
 	}
 
 	private synchronized void handleMarketOrders() {
@@ -40,7 +61,7 @@ public class MarketMakerServices {
 
 		if (marketOrders.size() > 0) {
 			// get earliest MarketOrder
-			MarketOrder currentOrder = marketOrders.remove(0);
+			MarketOrder currentOrder = marketOrders.get(0);
 			int type = currentOrder.getOrderType();
 			int size = currentOrder.getUnfulfilled();
 			int marketclientId = currentOrder.getClient();
@@ -50,118 +71,101 @@ public class MarketMakerServices {
 			// Market buy
 			if (type == 1) {
 				if (sellList.size() > 0) {
-					MarketOrder bestAsk = sellList.remove(0);
+					MarketOrder bestAsk = sellList.get(0);
 					int ask = bestAsk.getPrice();
 					int askSize = bestAsk.getUnfulfilled();
 					int askClient = bestAsk.getClient();
+					int smallerAmount;
+					if (size > askSize)
+						smallerAmount = askSize;
+					else
+						smallerAmount = size;
 
-					if (size > askSize) {
-						bestAsk.fulfillOrder(askSize);
-						currentOrder.fulfillOrder(askSize);
-						dao.merge(bestAsk);
-						dao.merge(currentOrder);
+					bestAsk.fulfillOrder(smallerAmount);
+					currentOrder.fulfillOrder(smallerAmount);
+					dao.merge(bestAsk);
+					dao.merge(currentOrder);
 
-						Quote quote = new Quote(ask, askSize, currentTime);
+					Quote quote = new Quote(currentTime);
+					if (smallerAmount > 0) {
 						quote.setAsk(ask);
-						quote.setAskSize(askSize);
-						if (buyList.size() > 0) {
-							MarketOrder bidOrder = buyList.remove(0);
-							int bid = bidOrder.getPrice();
-							int bidSize = bidOrder.getUnfulfilled();
-							quote.setBid(bid);
-							quote.setBidSize(bidSize);
-						}
-						quoteDao.persist(quote);
-						
-						Client marketClient = clientDao.findById(marketclientId);
-						Client limitClient = clientDao.findById(askClient);
-						marketClient.buyShares(askSize, ask * askSize);
-						limitClient.sellShares(askSize, ask * askSize);
-						clientDao.merge(marketClient);
-						clientDao.merge(limitClient);
 					} else {
-						bestAsk.fulfillOrder(size);
-						currentOrder.fulfillOrder(size);
-						dao.merge(bestAsk);
-						dao.merge(currentOrder);
+						quote.setAsk(-1);
+					}
+					quote.setAskSize(smallerAmount);
+					if (buyList.size() > 0) {
+						MarketOrder bidOrder = buyList.get(0);
+						int bid = bidOrder.getPrice();
+						int bidSize = bidOrder.getUnfulfilled();
+						quote.setBid(bid);
+						quote.setBidSize(bidSize);
+					}
+					quoteDao.persist(quote);
 
-						Quote quote = new Quote(ask, size, currentTime);
-						quote.setAsk(ask);
-						quote.setAskSize(size);
-						if (buyList.size() > 0) {
-							MarketOrder bidOrder = buyList.remove(0);
-							int bid = bidOrder.getPrice();
-							int bidSize = bidOrder.getUnfulfilled();
-							quote.setBid(bid);
-							quote.setBidSize(bidSize);
-						}
-						quoteDao.persist(quote);
-						
-						Client marketClient = clientDao.findById(marketclientId);
-						Client limitClient = clientDao.findById(askClient);
-						marketClient.buyShares(size, ask * size);
-						limitClient.sellShares(size, ask * size);
-						clientDao.merge(marketClient);
-						clientDao.merge(limitClient);
+					Client marketClient = clientDao.findById(marketclientId);
+					Client limitClient = clientDao.findById(askClient);
+					marketClient.buyShares(smallerAmount, ask * smallerAmount);
+					limitClient.sellShares(smallerAmount, ask * smallerAmount);
+					clientDao.merge(marketClient);
+					clientDao.merge(limitClient);
+
+					if (smallerAmount > 0) {
+						Sale sale = new Sale(marketclientId, askClient,
+								smallerAmount, ask, currentTime,
+								currentOrder.getId(), bestAsk.getId());
+						saleDao.persist(sale);
 					}
 				}
+
 			} else {
 				if (buyList.size() > 0) {
-					MarketOrder bestBid = buyList.remove(0);
+					MarketOrder bestBid = buyList.get(0);
 					int bid = bestBid.getPrice();
 					int bidSize = bestBid.getUnfulfilled();
 					int bidClient = bestBid.getClient();
+					int smallerAmount;
 
-					if (size > bidSize) {
-						bestBid.fulfillOrder(bidSize);
-						currentOrder.fulfillOrder(bidSize);
-						dao.merge(bestBid);
-						dao.merge(currentOrder);
+					if (size > bidSize)
+						smallerAmount = bidSize;
+					else
+						smallerAmount = size;
 
-						Quote quote = new Quote(bid, bidSize, currentTime);
+					bestBid.fulfillOrder(smallerAmount);
+					currentOrder.fulfillOrder(smallerAmount);
+					dao.merge(bestBid);
+					dao.merge(currentOrder);
+
+					Quote quote = new Quote(currentTime);
+					if (smallerAmount > 0) {
 						quote.setBid(bid);
-						quote.setBidSize(bidSize);
-						if (sellList.size() > 0) {
-							MarketOrder askOrder = sellList.remove(0);
-							int ask = askOrder.getPrice();
-							int askSize = askOrder.getUnfulfilled();
-							quote.setAsk(ask);
-							quote.setAskSize(askSize);
-						}
-						quoteDao.persist(quote);
-						Client marketClient = clientDao.findById(marketclientId);
-						Client limitClient = clientDao.findById(bidClient);
-						marketClient.buyShares(bidSize, bid * bidSize);
-						limitClient.sellShares(bidSize, bid * bidSize);
-						clientDao.merge(marketClient);
-						clientDao.merge(limitClient);
 					} else {
-						bestBid.fulfillOrder(size);
-						currentOrder.fulfillOrder(size);
-						dao.merge(bestBid);
-						dao.merge(currentOrder);
+						quote.setBid(-1);
+					}
+					quote.setBidSize(smallerAmount);
+					if (sellList.size() > 0) {
+						MarketOrder askOrder = sellList.get(0);
+						int ask = askOrder.getPrice();
+						int askSize = askOrder.getUnfulfilled();
+						quote.setAsk(ask);
+						quote.setAskSize(askSize);
+					}
+					quoteDao.persist(quote);
 
-						Quote quote = new Quote(bid, size, currentTime);
-						quote.setBid(bid);
-						quote.setBidSize(size);
-						if (sellList.size() > 0) {
-							MarketOrder askOrder = sellList.remove(0);
-							int ask = askOrder.getPrice();
-							int askSize = askOrder.getUnfulfilled();
-							quote.setAsk(ask);
-							quote.setAskSize(askSize);
-						}
-						quoteDao.persist(quote);
-						Client marketClient = clientDao.findById(marketclientId);
-						Client limitClient = clientDao.findById(bidClient);
-						marketClient.buyShares(size, bid * size);
-						limitClient.sellShares(size, bid * size);
-						clientDao.merge(marketClient);
-						clientDao.merge(limitClient);
+					Client marketClient = clientDao.findById(marketclientId);
+					Client limitClient = clientDao.findById(bidClient);
+					marketClient.sellShares(smallerAmount, bid * smallerAmount);
+					limitClient.buyShares(smallerAmount, bid * smallerAmount);
+					clientDao.merge(marketClient);
+					clientDao.merge(limitClient);
+
+					if (smallerAmount > 0) {
+						Sale sale = new Sale(marketclientId, bidClient,
+								smallerAmount, bid, currentTime,
+								bestBid.getId(), currentOrder.getId());
+						saleDao.persist(sale);
 					}
 				}
 			}
-
 		}
 	}
 
@@ -171,41 +175,29 @@ public class MarketMakerServices {
 		List<MarketOrder> limitSells = dao.getLimitSells();
 
 		if (limitBuys.size() > 0 && limitSells.size() > 0) {
-			for (MarketOrder limitBuy : limitBuys) {
-				if (limitSells.indexOf(limitBuy) != -1) {
-					long time = new Date().getTime();
-					MarketOrder limitSell = limitSells.get(limitSells
-							.indexOf(limitBuy));
-					int price = limitBuy.getPrice();
-					int buyAmount = limitBuy.getAmount();
-					int sellAmount = limitSell.getAmount();
-
-					if (buyAmount > sellAmount) {
-						limitBuy.fulfillOrder(sellAmount);
-						limitSell.fulfillOrder(sellAmount);
+			for (int buyCt = 0; buyCt < limitBuys.size(); buyCt++) {
+				int price = limitBuys.get(buyCt).getPrice();
+				int buyAmount = limitBuys.get(buyCt).getAmount();
+				for (int sellCt = 0; sellCt < limitBuys.size(); sellCt++) {
+					if (price == limitSells.get(sellCt).getPrice()) {
+						long time = new Date().getTime();
+						MarketOrder limitSell = limitSells.get(sellCt);
+						MarketOrder limitBuy = limitBuys.get(buyCt);
+						int sellAmount = limitSell.getAmount();
+						int smallerAmount;
+						if (buyAmount > sellAmount)
+							smallerAmount = sellAmount;
+						else
+							smallerAmount = buyAmount;
+						limitBuy.fulfillOrder(smallerAmount);
+						limitSell.fulfillOrder(smallerAmount);
 						dao.merge(limitBuy);
 						dao.merge(limitSell);
-
-						Quote quote = new Quote(price, sellAmount, time);
-						quote.setAsk(price);
-						quote.setAskSize(buyAmount);
-						quote.setBid(price);
-						quote.setBidSize(sellAmount);
-						quote.setTime(time);
-						quoteDao.persist(quote);
-					} else {
-						limitBuy.fulfillOrder(buyAmount);
-						limitSell.fulfillOrder(buyAmount);
-						dao.merge(limitBuy);
-						dao.merge(limitSell);
-
-						Quote quote = new Quote(price, buyAmount, time);
-						quote.setAsk(price);
-						quote.setAskSize(buyAmount);
-						quote.setBid(price);
-						quote.setBidSize(buyAmount);
-						quote.setTime(time);
-						quoteDao.persist(quote);
+						
+						Sale sale = new Sale(limitBuy.getClient(),
+								limitSell.getClient(), smallerAmount, price, time,
+								limitBuy.getId(), limitSell.getId());
+						saleDao.persist(sale);
 					}
 
 				}
