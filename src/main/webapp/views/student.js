@@ -1,16 +1,18 @@
 define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 		'text!templates/student.template', 'text!templates/graph.template',
 		'text!templates/timer.template', 'text!templates/openOrders.template',
-		'text!templates/news.template', '../timer', '../news', '../flotGraph',
+		'text!templates/news.template', 'text!templates/quotePortfolioTable.template', 
+		'../timer', '../news', '../flotGraph',
 		'../trading', 'flotTime', 'bootstrap' ], function(App, $, _, Backbone,
 		Handlebars, flot, studentTemplate, graphTemplate, timerTemplate,
-		openOrdersTemplate, newsTemplate) {
+		openOrdersTemplate, newsTemplate, quotePortfolioTableTemplate) {
 
 	_studentTemplate = Handlebars.compile(studentTemplate);
 	_graphTemplate = Handlebars.compile(graphTemplate);
 	_timerTemplate = Handlebars.compile(timerTemplate);
 	_openOrdersTemplate = Handlebars.compile(openOrdersTemplate);
 	_newsTemplate = Handlebars.compile(newsTemplate);
+	_quotePortfolioTableTemplate = Handlebars.compile(quotePortfolioTableTemplate);
 
 	var marketYear = 0;
 	var marketInterval, clientId, news;
@@ -29,6 +31,20 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 				"news" : [ {
 					"new" : "Market is closed"
 				} ]
+			}));
+			$('#quotePortfolioTable').html(_quotePortfolioTableTemplate({
+				"last" : "-",
+				"low" : "-",
+				"high" : "-",
+				"bid" : "-",
+				"bidSize" : 0,
+				"ask" : "-",
+				"askSize" : 0,
+				"volume" : 0,
+				"quantity" : 400,
+				"crlTotal" : 0,
+				"cashTotal" : 10000,
+				"total" : 10000
 			}));
 			$('button').prop('disabled', true);
 			

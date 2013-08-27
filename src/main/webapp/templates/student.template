@@ -14,32 +14,7 @@
   		
   		<div id="graph"></div>
   		
-  		<table class="table table-bordered" style="width:70%">
-  			<tr>
-  				<th></th>
-  				<th>Low</th>
-  				<th>High</th>
-  				<th>Size</th>
-  			</tr>
-  			<tr>
-  				<th>Assets</th>
-  				<td>Stuff</td>
-  				<td>Stuff</td>
-  				<td>Stuff</td>
-  			</tr>
-  			<tr>
-  				<th>Cash</th>
-  				<td>Stuff</td>
-  				<td>Stuff</td>
-  				<td>Stuff</td>
-  			</tr>
-  			<tr>
-  				<th>Total</th>
-  				<td>Stuff</td>
-  				<td>Stuff</td>
-  				<td>Stuff</td>
-  			</tr>
-		</table>
+  		<div id="quotePortfolioTable"></div>
 		
   	</div>
   	

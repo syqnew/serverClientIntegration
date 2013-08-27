@@ -1,0 +1,47 @@
+<table class="table table-bordered" style="width:70%">
+	<tr>
+		<th></th>
+		<th>Last</th>
+		<th>Low</th>
+		<th>High</th>
+		<th>Bid/Size</th>
+		<th>Ask/Size</th>
+		<th>Volume</th>
+		<th>Quantity</th>
+		<th>Market Value</th>
+	</tr>
+	<tr>
+		<th>CRL</th>
+		<td>{{last}}</td>
+		<td>{{low}}</td>
+		<td>{{high}}</td>
+		<td>{{bid}}/{{bidSize}}</td>
+		<td>{{ask}}/{{askSize}}</td>
+		<td>{{volume}}</td>
+		<td>{{quantity}}</td>
+		<td>{{crlTotal}}</td>
+	</tr>
+	<tr>
+		<th>Cash</th>
+		<td>-</td>
+		<td>-</td>
+		<td>-</td>
+		<td>-</td>
+		<td>-</td>
+		<td>-</td>
+		<td>-</td>
+		<td>{{cashTotal}}</td>
+	</tr>
+	<tr>
+		<th>Total</th>
+		<td>-</td>
+		<td>-</td>
+		<td>-</td>
+		<td>-</td>
+		<td>-</td>
+		<td>-</td>
+		<td>-</td>
+		<td>{{total}}</td>
+	</tr>
+</table>
+
