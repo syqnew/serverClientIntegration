@@ -26,7 +26,12 @@
 	  			<h4>Trade</h4>
 			</div>
 				<div class="modal-body">
+				<div class="alert" id=shortSellingAlert> 
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+  					<strong>No short selling allowed for this user!</strong>
+				</div>
 					<form class="form-inline">
+						<p>Symbol: CRL</p>
 					  	<input id="size" type="text" class="input-medium" placeholder="Size">
 					  	<input id="price" type="text" class="input-medium" placeholder="Price">
 					</form>

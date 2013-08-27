@@ -32,7 +32,8 @@
         <mapping class="com.github.syqnew.domain.Client" />
         <mapping class="com.github.syqnew.domain.MarketOrder" />
         <mapping class="com.github.syqnew.domain.Quote" />
-        <mapping class="com.github.syqnew.domain.News" />         
+        <mapping class="com.github.syqnew.domain.News" />
+        <mapping class="com.github.syqnew.domain.Sale" />             
           
     </session-factory>
 </hibernate-configuration>

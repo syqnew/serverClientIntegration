@@ -26,6 +26,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 		render : function(email) {
 			initialTemplate["email"] = email;
 			$('#loginModal').html(_studentTemplate(initialTemplate));
+			$('#shortSellingAlert').hide();
 			$('#graph').html(_graphTemplate());
 			$('#marketNews').html(_newsTemplate({
 				"news" : [ {
@@ -103,29 +104,42 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 				order["status"] = 0;
 				order["client"] = clientId;
 				
+				var clientData = "email=" + email;
 				var ajax = $.ajax({
 					type : "GET",
 					url : "http://localhost:8080/client",
 					data : clientData,
 					dataType : "json",
 					success : function(data) {
-						if ( data["shares"] >= order["amount"]) {
+						if ( data["shares"] >= order["amount"] ) {
+							$('#size').val("");
+							$('#price').val("");
 							var ajax2 = $.ajax({
-								type : "POST",
-								url : "http://localhost:8080/order",
-								data : JSON.stringify(order),
+								type : "GET",
+								url : "http://localhost:8080/client",
+								data : clientData,
 								dataType : "json",
 								success : function(data) {
-									console.log("success");
+									if ( data["shares"] >= order["amount"]) {
+										var ajax2 = $.ajax({
+											type : "POST",
+											url : "http://localhost:8080/order",
+											data : JSON.stringify(order),
+											dataType : "json",
+											success : function(data) {
+												console.log("success");
+											}
+										});
+									}
 								}
 							});
+						} else {
+							$('#shortSellingAlert').show();
 						}
 					}
 				});
 
 				
-				$('#size').val("");
-				$('#price').val("");
 			});
 
 			$('#limitBuyBtn').on("click", function(event) {

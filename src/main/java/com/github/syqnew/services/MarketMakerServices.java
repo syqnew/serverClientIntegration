@@ -3,10 +3,15 @@ package com.github.syqnew.services;
 import java.util.Date;
 import java.util.List;
 
+import com.github.syqnew.dao.ClientDao;
 import com.github.syqnew.dao.MarketOrderDao;
 import com.github.syqnew.dao.QuoteDao;
+import com.github.syqnew.dao.SaleDao;
+import com.github.syqnew.dao.impl.ClientDaoImpl;
 import com.github.syqnew.dao.impl.MarketOrderDaoImpl;
 import com.github.syqnew.dao.impl.QuoteDaoImpl;
+import com.github.syqnew.dao.impl.SaleDaoImpl;
+import com.github.syqnew.domain.Client;
 import com.github.syqnew.domain.MarketOrder;
 import com.github.syqnew.domain.Quote;
 
@@ -14,10 +19,14 @@ public class MarketMakerServices {
 
 	MarketOrderDao dao;
 	QuoteDao quoteDao;
+	ClientDao clientDao;
+	SaleDao saleDao;
 
 	public MarketMakerServices() {
 		dao = new MarketOrderDaoImpl();
 		quoteDao = new QuoteDaoImpl();
+		clientDao = new ClientDaoImpl();
+		saleDao = new SaleDaoImpl();
 	}
 
 	public void handleOrders() {
@@ -34,6 +43,7 @@ public class MarketMakerServices {
 			MarketOrder currentOrder = marketOrders.remove(0);
 			int type = currentOrder.getOrderType();
 			int size = currentOrder.getUnfulfilled();
+			int marketclientId = currentOrder.getClient();
 			long currentTime = new Date().getTime();
 			List<MarketOrder> sellList = dao.getLimitSells();
 			List<MarketOrder> buyList = dao.getLimitBuys();
@@ -43,6 +53,7 @@ public class MarketMakerServices {
 					MarketOrder bestAsk = sellList.remove(0);
 					int ask = bestAsk.getPrice();
 					int askSize = bestAsk.getUnfulfilled();
+					int askClient = bestAsk.getClient();
 
 					if (size > askSize) {
 						bestAsk.fulfillOrder(askSize);
@@ -61,6 +72,13 @@ public class MarketMakerServices {
 							quote.setBidSize(bidSize);
 						}
 						quoteDao.persist(quote);
+						
+						Client marketClient = clientDao.findById(marketclientId);
+						Client limitClient = clientDao.findById(askClient);
+						marketClient.buyShares(askSize, ask * askSize);
+						limitClient.sellShares(askSize, ask * askSize);
+						clientDao.merge(marketClient);
+						clientDao.merge(limitClient);
 					} else {
 						bestAsk.fulfillOrder(size);
 						currentOrder.fulfillOrder(size);
@@ -78,14 +96,21 @@ public class MarketMakerServices {
 							quote.setBidSize(bidSize);
 						}
 						quoteDao.persist(quote);
+						
+						Client marketClient = clientDao.findById(marketclientId);
+						Client limitClient = clientDao.findById(askClient);
+						marketClient.buyShares(size, ask * size);
+						limitClient.sellShares(size, ask * size);
+						clientDao.merge(marketClient);
+						clientDao.merge(limitClient);
 					}
-
 				}
 			} else {
 				if (buyList.size() > 0) {
 					MarketOrder bestBid = buyList.remove(0);
 					int bid = bestBid.getPrice();
 					int bidSize = bestBid.getUnfulfilled();
+					int bidClient = bestBid.getClient();
 
 					if (size > bidSize) {
 						bestBid.fulfillOrder(bidSize);
@@ -104,6 +129,12 @@ public class MarketMakerServices {
 							quote.setAskSize(askSize);
 						}
 						quoteDao.persist(quote);
+						Client marketClient = clientDao.findById(marketclientId);
+						Client limitClient = clientDao.findById(bidClient);
+						marketClient.buyShares(bidSize, bid * bidSize);
+						limitClient.sellShares(bidSize, bid * bidSize);
+						clientDao.merge(marketClient);
+						clientDao.merge(limitClient);
 					} else {
 						bestBid.fulfillOrder(size);
 						currentOrder.fulfillOrder(size);
@@ -121,6 +152,12 @@ public class MarketMakerServices {
 							quote.setAskSize(askSize);
 						}
 						quoteDao.persist(quote);
+						Client marketClient = clientDao.findById(marketclientId);
+						Client limitClient = clientDao.findById(bidClient);
+						marketClient.buyShares(size, bid * size);
+						limitClient.sellShares(size, bid * size);
+						clientDao.merge(marketClient);
+						clientDao.merge(limitClient);
 					}
 				}
 			}

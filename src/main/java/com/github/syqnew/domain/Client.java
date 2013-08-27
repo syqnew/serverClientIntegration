@@ -54,4 +54,14 @@ public class Client implements BaseObject {
 		this.shares = shares;
 	}
 
+	public void buyShares(int shares, int totalPrice) {
+		this.shares += shares;
+		this.cash -= totalPrice;
+	}
+
+	public void sellShares(int shares, int totalPrice) {
+		this.shares -= shares;
+		this.cash += totalPrice;
+	}
+
 }

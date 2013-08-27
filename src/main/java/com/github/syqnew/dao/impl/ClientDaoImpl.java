@@ -26,4 +26,12 @@ public class ClientDaoImpl extends BaseDaoImpl<Client> implements ClientDao {
 		return client;
 	}
 
+	public Client findById(int id) {
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();
+		Client client = (Client) session.get(Client.class, id);
+		session.close();
+		return client;
+	}
+
 }
