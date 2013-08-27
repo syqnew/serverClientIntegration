@@ -30,16 +30,16 @@ function checkForUpdates() {
 				for ( var ct = 0; ct < data.length; ct++) {
 					var temp = {};
 					temp["id"] = data[ct]["id"];
-					if (data[ct]["orderType"] == 1)
+					if (data[ct]["orderType"] == 1 && data[ct]["unfulfilled"] != 0)
 						temp["order"] = "Buy " + data[ct]["unfulfilled"]
 								+ " shares at Market Price";
-					else if (data[ct]["orderType"] == 2)
+					if (data[ct]["orderType"] == 2 && data[ct]["unfulfilled"] != 0)
 						temp["order"] = "Sell " + data[ct]["unfulfilled"]
 								+ " shares at Market Price";
-					else if (data[ct]["orderType"] == 3)
+					if (data[ct]["orderType"] == 3 && data[ct]["unfulfilled"] != 0)
 						temp["order"] = "Buy " + data[ct]["unfulfilled"]
 								+ " shares at $" + data[ct]["price"];
-					else
+					if (data[ct]["orderType"] == 3 && data[ct]["unfulfilled"] != 0)
 						temp["order"] = "Sell " + data[ct]["unfulfilled"]
 								+ " shares at $" + data[ct]["price"];
 					
