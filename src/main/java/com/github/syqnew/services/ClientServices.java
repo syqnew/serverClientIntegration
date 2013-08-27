@@ -21,7 +21,7 @@ public class ClientServices {
 		dao = new ClientDaoImpl();
 	}
 
-	public void getClientId(HttpServletRequest request,
+	public void getClient(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		Client client = dao.findByEmail(request.getParameter("email"));
 		ObjectMapper mapper = new ObjectMapper();

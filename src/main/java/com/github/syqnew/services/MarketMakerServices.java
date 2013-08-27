@@ -19,7 +19,7 @@ public class MarketMakerServices {
 		dao = new MarketOrderDaoImpl();
 		quoteDao = new QuoteDaoImpl();
 	}
-	
+
 	public void handleOrders() {
 		handleMarketOrders();
 		handleLimitOrders();
@@ -35,23 +35,31 @@ public class MarketMakerServices {
 			int type = currentOrder.getOrderType();
 			int size = currentOrder.getUnfulfilled();
 			long currentTime = new Date().getTime();
+			List<MarketOrder> sellList = dao.getLimitSells();
+			List<MarketOrder> buyList = dao.getLimitBuys();
 			// Market buy
 			if (type == 1) {
-				List<MarketOrder> sellList = dao.getLimitSells();
 				if (sellList.size() > 0) {
 					MarketOrder bestAsk = sellList.remove(0);
-					int volume = bestAsk.getUnfulfilled();
-					int price = bestAsk.getPrice();
-					
-					if (size > volume) {
-						bestAsk.fulfillOrder(volume);
-						currentOrder.fulfillOrder(volume);
+					int ask = bestAsk.getPrice();
+					int askSize = bestAsk.getUnfulfilled();
+
+					if (size > askSize) {
+						bestAsk.fulfillOrder(askSize);
+						currentOrder.fulfillOrder(askSize);
 						dao.merge(bestAsk);
 						dao.merge(currentOrder);
 
-						Quote quote = new Quote(price, volume, currentTime);
-						quote.setAsk(price);
-						quote.setAskSize(volume);
+						Quote quote = new Quote(ask, askSize, currentTime);
+						quote.setAsk(ask);
+						quote.setAskSize(askSize);
+						if (buyList.size() > 0) {
+							MarketOrder bidOrder = buyList.remove(0);
+							int bid = bidOrder.getPrice();
+							int bidSize = bidOrder.getUnfulfilled();
+							quote.setBid(bid);
+							quote.setBidSize(bidSize);
+						}
 						quoteDao.persist(quote);
 					} else {
 						bestAsk.fulfillOrder(size);
@@ -59,29 +67,42 @@ public class MarketMakerServices {
 						dao.merge(bestAsk);
 						dao.merge(currentOrder);
 
-						Quote quote = new Quote(price, size, currentTime);
-						quote.setAsk(price);
+						Quote quote = new Quote(ask, size, currentTime);
+						quote.setAsk(ask);
 						quote.setAskSize(size);
+						if (buyList.size() > 0) {
+							MarketOrder bidOrder = buyList.remove(0);
+							int bid = bidOrder.getPrice();
+							int bidSize = bidOrder.getUnfulfilled();
+							quote.setBid(bid);
+							quote.setBidSize(bidSize);
+						}
 						quoteDao.persist(quote);
 					}
 
 				}
 			} else {
-				List<MarketOrder> buyList = dao.getLimitBuys();
 				if (buyList.size() > 0) {
 					MarketOrder bestBid = buyList.remove(0);
-					int volume = bestBid.getUnfulfilled();
-					int price = bestBid.getPrice();
+					int bid = bestBid.getPrice();
+					int bidSize = bestBid.getUnfulfilled();
 
-					if (size > volume) {
-						bestBid.fulfillOrder(volume);
-						currentOrder.fulfillOrder(volume);
+					if (size > bidSize) {
+						bestBid.fulfillOrder(bidSize);
+						currentOrder.fulfillOrder(bidSize);
 						dao.merge(bestBid);
 						dao.merge(currentOrder);
 
-						Quote quote = new Quote(price, volume, currentTime);
-						quote.setBid(price);
-						quote.setBidSize(volume);
+						Quote quote = new Quote(bid, bidSize, currentTime);
+						quote.setBid(bid);
+						quote.setBidSize(bidSize);
+						if (sellList.size() > 0) {
+							MarketOrder askOrder = sellList.remove(0);
+							int ask = askOrder.getPrice();
+							int askSize = askOrder.getUnfulfilled();
+							quote.setAsk(ask);
+							quote.setAskSize(askSize);
+						}
 						quoteDao.persist(quote);
 					} else {
 						bestBid.fulfillOrder(size);
@@ -89,9 +110,16 @@ public class MarketMakerServices {
 						dao.merge(bestBid);
 						dao.merge(currentOrder);
 
-						Quote quote = new Quote(price, size, currentTime);
-						quote.setBid(price);
+						Quote quote = new Quote(bid, size, currentTime);
+						quote.setBid(bid);
 						quote.setBidSize(size);
+						if (sellList.size() > 0) {
+							MarketOrder askOrder = sellList.remove(0);
+							int ask = askOrder.getPrice();
+							int askSize = askOrder.getUnfulfilled();
+							quote.setAsk(ask);
+							quote.setAskSize(askSize);
+						}
 						quoteDao.persist(quote);
 					}
 				}

@@ -77,25 +77,37 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 
 			$('#marketSellBtn').on("click", function(event) {
 				event.preventDefault();
-				var data = {};
-				data["orderType"] = 2;
-				data["amount"] = $('#size').val();
-				data["price"] = -1;
-				data["time"] = new Date().getTime();
-				data["unfulfilled"] = $('#size').val();
+				var order = {};
+				order["orderType"] = 2;
+				order["amount"] = $('#size').val();
+				order["price"] = -1;
+				order["time"] = new Date().getTime();
+				order["unfulfilled"] = $('#size').val();
 				// status 0 -> OK, 10 -> cancelled
-				data["status"] = 0;
-				data["client"] = clientId;
-
+				order["status"] = 0;
+				order["client"] = clientId;
+				
 				var ajax = $.ajax({
-					type : "POST",
-					url : "http://localhost:8080/order",
-					data : JSON.stringify(data),
+					type : "GET",
+					url : "http://localhost:8080/client",
+					data : clientData,
 					dataType : "json",
 					success : function(data) {
-						console.log("success");
+						if ( data["shares"] >= order["amount"]) {
+							var ajax2 = $.ajax({
+								type : "POST",
+								url : "http://localhost:8080/order",
+								data : JSON.stringify(order),
+								dataType : "json",
+								success : function(data) {
+									console.log("success");
+								}
+							});
+						}
 					}
 				});
+
+				
 				$('#size').val("");
 				$('#price').val("");
 			});
