@@ -2,7 +2,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 		'text!templates/student.template', 'text!templates/graph.template',
 		'text!templates/timer.template', 'text!templates/openOrders.template',
 		'text!templates/news.template', 'text!templates/quotePortfolioTable.template', 
-		'../timer', '../news', '../flotGraph',
+		'../timer', '../news', '../updateTable', '../flotGraph',
 		'../trading', 'flotTime', 'bootstrap' ], function(App, $, _, Backbone,
 		Handlebars, flot, studentTemplate, graphTemplate, timerTemplate,
 		openOrdersTemplate, newsTemplate, quotePortfolioTableTemplate) {
@@ -224,6 +224,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 					}));
 					$('button').prop('disabled', false);
 					marketYear = data["year"];
+					updateTable(clientId, data["duration"]);
 					news = new News(data["duration"], clientId);
 					news.getStage1News();
 					var timer = new TraderTimer();

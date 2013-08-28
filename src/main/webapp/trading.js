@@ -46,7 +46,6 @@ function checkForUpdates() {
 					ordersList.push(temp);
 				}
 				orders["orders"] = ordersList;
-				console.log(orders);
 				$('#openOrders').html(_openOrdersTemplate(orders));
 			}
 		}

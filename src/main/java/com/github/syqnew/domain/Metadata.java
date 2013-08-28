@@ -1,18 +1,24 @@
 package com.github.syqnew.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Version;
 
 @Entity
 public class Metadata implements BaseObject {
 
+	@Id
+	private int id;
+	private int last;
 	private int high;
 	private int low;
-	private int last;
 	private int volume;
 	private int bid;
 	private int bidSize;
 	private int ask;
 	private int askSize;
+	@Version
+	private int version;
 
 	public Metadata() {
 	}
@@ -79,6 +85,18 @@ public class Metadata implements BaseObject {
 
 	public void setAskSize(int askSize) {
 		this.askSize = askSize;
+	}
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
+	
+	public void addToVolume(int size) {
+		this.volume += size;
 	}
 
 }

@@ -5,14 +5,17 @@ import java.util.List;
 
 import com.github.syqnew.dao.ClientDao;
 import com.github.syqnew.dao.MarketOrderDao;
+import com.github.syqnew.dao.MetadataDao;
 import com.github.syqnew.dao.QuoteDao;
 import com.github.syqnew.dao.SaleDao;
 import com.github.syqnew.dao.impl.ClientDaoImpl;
 import com.github.syqnew.dao.impl.MarketOrderDaoImpl;
+import com.github.syqnew.dao.impl.MetadataDaoImpl;
 import com.github.syqnew.dao.impl.QuoteDaoImpl;
 import com.github.syqnew.dao.impl.SaleDaoImpl;
 import com.github.syqnew.domain.Client;
 import com.github.syqnew.domain.MarketOrder;
+import com.github.syqnew.domain.Metadata;
 import com.github.syqnew.domain.Quote;
 import com.github.syqnew.domain.Sale;
 
@@ -22,12 +25,14 @@ public class MarketMakerServices {
 	QuoteDao quoteDao;
 	ClientDao clientDao;
 	SaleDao saleDao;
+	MetadataDao metadataDao;
 
 	public MarketMakerServices() {
 		dao = new MarketOrderDaoImpl();
 		quoteDao = new QuoteDaoImpl();
 		clientDao = new ClientDaoImpl();
 		saleDao = new SaleDaoImpl();
+		metadataDao = new MetadataDaoImpl();
 	}
 
 	public void handleOrders() {
@@ -41,24 +46,37 @@ public class MarketMakerServices {
 		List<MarketOrder> buyList = dao.getLimitBuys();
 		if (sellList.size() == 0 && buyList.size() == 0) return;
 		long currentTime = new Date().getTime();
+		Metadata metadata = metadataDao.findAll().get(0);
+		
 		Quote quote = new Quote(currentTime);
 		if (sellList.size() > 0) {
 			MarketOrder sell = sellList.get(0);
 			quote.setAsk(sell.getPrice());
 			quote.setAskSize(sell.getUnfulfilled());
+			metadata.setAsk(sell.getPrice());
+			metadata.setAskSize(sell.getUnfulfilled());
+		} else {
+			metadata.setAsk(-1);
+			metadata.setAskSize(0);
 		}
 		if (buyList.size() > 0) {
 			MarketOrder buy = buyList.get(0);
 			quote.setBid(buy.getPrice());
 			quote.setBidSize(buy.getAmount());
+			metadata.setBid(buy.getPrice());
+			metadata.setBidSize(buy.getUnfulfilled());
+		} else {
+			metadata.setBid(-1);
+			metadata.setBidSize(0);
 		}
 		quoteDao.persist(quote);
+		metadataDao.merge(metadata);
 	}
 
 	private synchronized void handleMarketOrders() {
-
 		List<MarketOrder> marketOrders = dao.getMarketOrders();
-
+		Metadata metadata = metadataDao.findAll().get(0);
+		
 		if (marketOrders.size() > 0) {
 			// get earliest MarketOrder
 			MarketOrder currentOrder = marketOrders.get(0);
@@ -99,8 +117,12 @@ public class MarketMakerServices {
 						int bidSize = bidOrder.getUnfulfilled();
 						quote.setBid(bid);
 						quote.setBidSize(bidSize);
+					} else {
+						quote.setBid(-1);
+						quote.setBidSize(0);
 					}
 					quoteDao.persist(quote);
+					
 
 					Client marketClient = clientDao.findById(marketclientId);
 					Client limitClient = clientDao.findById(askClient);
@@ -115,6 +137,13 @@ public class MarketMakerServices {
 								currentOrder.getId(), bestAsk.getId());
 						saleDao.persist(sale);
 					}
+					metadata.addToVolume(smallerAmount);
+					if (metadata.getHigh() < ask)
+						metadata.setHigh(ask);
+					if (metadata.getLow() > ask)
+						metadata.setLow(ask);
+					metadata.setLast(ask);
+					metadataDao.merge(metadata);
 				}
 
 			} else {
@@ -148,6 +177,9 @@ public class MarketMakerServices {
 						int askSize = askOrder.getUnfulfilled();
 						quote.setAsk(ask);
 						quote.setAskSize(askSize);
+					} else {
+						quote.setAsk(-1);
+						quote.setAskSize(0);
 					}
 					quoteDao.persist(quote);
 
@@ -164,6 +196,14 @@ public class MarketMakerServices {
 								bestBid.getId(), currentOrder.getId());
 						saleDao.persist(sale);
 					}
+					
+					metadata.addToVolume(smallerAmount);
+					if (metadata.getHigh() < bid)
+						metadata.setHigh(bid);
+					if (metadata.getLow() > bid)
+						metadata.setLow(bid);
+					metadata.setLast(bid);
+					metadataDao.merge(metadata);
 				}
 			}
 		}
@@ -173,6 +213,7 @@ public class MarketMakerServices {
 
 		List<MarketOrder> limitBuys = dao.getLimitBuys();
 		List<MarketOrder> limitSells = dao.getLimitSells();
+		Metadata metadata = metadataDao.findAll().get(0);
 
 		if (limitBuys.size() > 0 && limitSells.size() > 0) {
 			for (int buyCt = 0; buyCt < limitBuys.size(); buyCt++) {
@@ -205,6 +246,12 @@ public class MarketMakerServices {
 								limitSell.getClient(), smallerAmount, price, time,
 								limitBuy.getId(), limitSell.getId());
 						saleDao.persist(sale);
+						
+						metadata.addToVolume(smallerAmount);
+						if (metadata.getHigh() < price) metadata.setHigh(price);
+						if (metadata.getLow() > price) metadata.setLow(price);
+						metadata.setLast(price);
+						metadataDao.merge(metadata);
 					}
 
 				}

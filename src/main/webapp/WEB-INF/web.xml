@@ -74,4 +74,13 @@
 		<servlet-name>SaleServlet</servlet-name>
 		<url-pattern>/sale/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>MetadataServlet</servlet-name>
+		<servlet-class>com.github.syqnew.servlets.MetadataServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MetadataServlet</servlet-name>
+		<url-pattern>/metadata/*</url-pattern>
+	</servlet-mapping>
 </web-app>
