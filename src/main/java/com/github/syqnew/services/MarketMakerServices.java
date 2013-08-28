@@ -194,6 +194,13 @@ public class MarketMakerServices {
 						dao.merge(limitBuy);
 						dao.merge(limitSell);
 						
+						Client buyClient = clientDao.findById(limitBuy.getClient());
+						Client sellClient = clientDao.findById(limitSell.getClient());
+						buyClient.buyShares(smallerAmount, price * smallerAmount);
+						sellClient.sellShares(smallerAmount, price * smallerAmount);
+						clientDao.merge(buyClient);
+						clientDao.merge(sellClient);
+						
 						Sale sale = new Sale(limitBuy.getClient(),
 								limitSell.getClient(), smallerAmount, price, time,
 								limitBuy.getId(), limitSell.getId());
