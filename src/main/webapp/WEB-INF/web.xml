@@ -65,4 +65,13 @@
 		<servlet-name>QuoteServlet</servlet-name>
 		<url-pattern>/quote/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SaleServlet</servlet-name>
+		<servlet-class>com.github.syqnew.servlets.SaleServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SaleServlet</servlet-name>
+		<url-pattern>/sale/*</url-pattern>
+	</servlet-mapping>
 </web-app>

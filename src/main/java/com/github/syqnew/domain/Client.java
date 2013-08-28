@@ -11,7 +11,7 @@ public class Client implements BaseObject {
 	@GeneratedValue
 	private int id;
 	private String email;
-	private int cash = 100000;
+	private int cash = 10000;
 	private int shares = 400;
 
 	public Client() {

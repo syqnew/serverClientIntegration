@@ -22,13 +22,17 @@ public class QuoteServices {
 		dao = new QuoteDaoImpl();
 	}
 
-	public void getAllQuotes(HttpServletRequest request,
+	public void getQuotes(HttpServletRequest request,
 			HttpServletResponse response) throws JsonGenerationException,
 			JsonMappingException, IOException {
-		List<Quote> quote = dao.findAll();
-
 		ObjectMapper mapper = new ObjectMapper();
-		response.getWriter().println(mapper.writeValueAsString(quote));
+		if (request.getParameter("number").equals("last")) {
+			Quote quote = dao.getLastQuote();
+			response.getWriter().println(mapper.writeValueAsString(quote));
+		} else {
+			List<Quote> quote = dao.findAll();
+			response.getWriter().println(mapper.writeValueAsString(quote));
+		}
 	}
 
 	public void insertQuote(HttpServletRequest request,

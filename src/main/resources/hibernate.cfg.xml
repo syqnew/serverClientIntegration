@@ -34,6 +34,7 @@
         <mapping class="com.github.syqnew.domain.Quote" />
         <mapping class="com.github.syqnew.domain.News" />
         <mapping class="com.github.syqnew.domain.Sale" />             
+        <mapping class="com.github.syqnew.domain.Metadata" /> 
           
     </session-factory>
 </hibernate-configuration>

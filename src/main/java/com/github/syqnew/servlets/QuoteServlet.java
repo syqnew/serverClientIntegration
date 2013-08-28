@@ -17,7 +17,7 @@ public class QuoteServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		response.setStatus(HttpServletResponse.SC_OK);
-		quoteServices.getAllQuotes(request, response);
+		quoteServices.getQuotes(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request,
