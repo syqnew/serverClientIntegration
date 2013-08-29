@@ -3,7 +3,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 		'text!templates/timer.template', 'text!templates/openOrders.template',
 		'text!templates/news.template', 'text!templates/quotePortfolioTable.template', 
 		'../timer', '../news', '../updateTable', '../volumeGraph',  '../flotGraph',
-		'../trading', 'flot', 'flotTime', 'flotCategories', 'd3', 'bootstrap' ], function(App, $, _, Backbone,
+		'../trading', 'flot', 'flotTime', 'd3', 'bootstrap' ], function(App, $, _, Backbone,
 		Handlebars, studentTemplate, graphTemplate, timerTemplate,
 		openOrdersTemplate, newsTemplate, quotePortfolioTableTemplate) {
 
@@ -51,7 +51,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 			}));
 			$('button').prop('disabled', true);
 
-			makeVolumeGraph('#placeholder2');
+			
 			flotGraph('#placeholder');
 			
 			// get id assigned to this client
@@ -235,6 +235,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 					var timer = new TraderTimer();
 					timer.countdown(data["duration"], '#studentTimer');
 					tradingOpen(data["duration"], clientId);
+					makeVolumeGraph('#placeholder2', data["duration"]);
 				}
 				else if (data["year"] == 2 && marketYear == 1) {
 					clearInterval(marketInterval);
@@ -242,6 +243,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 					news.getStage2News();
 					var timer = new TraderTimer();
 					timer.countdown(data["duration"], '#studentTimer');
+					makeVolumeGraph('#placeholder2'), data["duration"];
 				} 
 			}
 		});
