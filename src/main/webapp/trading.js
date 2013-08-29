@@ -27,7 +27,7 @@ function checkForUpdates() {
 
 				var orders = {};
 				var ordersList = [];
-				for ( var ct = 0; ct < data.length; ct++) {
+				for ( var ct = 0; ct < data.length; ct++ ) {
 					var temp = {};
 					temp["id"] = data[ct]["id"];
 					if (data[ct]["orderType"] == 1 && data[ct]["unfulfilled"] != 0)

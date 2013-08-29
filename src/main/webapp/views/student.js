@@ -102,7 +102,7 @@ define(
 									success : function(data) {
 										if ( data[0]["last"] != 0  ) {
 											if ( (data[0]["last"] * order["amount"]) <= data[1]["cash"] ) {
-												var ajax = $.ajax({
+												var ajax2 = $.ajax({
 													type : "POST",
 													url : "http://localhost:8080/order",
 													data : JSON.stringify(data),
@@ -118,7 +118,7 @@ define(
 											}
 											
 										} else {
-											var ajax = $.ajax({
+											var ajax2 = $.ajax({
 												type : "POST",
 												url : "http://localhost:8080/order",
 												data : JSON.stringify(data),
@@ -224,7 +224,7 @@ define(
 									dataType : "json",
 									success : function(data) { 
 										if ( order["amount"]*order["price"] <= data[1]["cash"] ) {
-											var ajax = $.ajax({
+											var ajax2 = $.ajax({
 												type : "POST",
 												url : "http://localhost:8080/order",
 												data : JSON.stringify(data),
@@ -265,7 +265,7 @@ define(
 												order["client"] = clientId;
 												var clientData = "email="
 														+ email;
-												var ajax2 = $
+												var ajax = $
 														.ajax({
 															type : "GET",
 															url : "http://localhost:8080/client",
@@ -280,7 +280,7 @@ define(
 																	$('#price')
 																			.val(
 																					"");
-																	var ajax = $
+																	var ajax2 = $
 																			.ajax({
 																				type : "POST",
 																				url : "http://localhost:8080/order",

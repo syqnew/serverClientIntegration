@@ -44,7 +44,7 @@ public class OrderServices {
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		MarketOrder order = mapper.readValue(request.getReader(), MarketOrder.class);
-		dao.merge(order);
+		dao.persist(order);
 	}
 
 }
