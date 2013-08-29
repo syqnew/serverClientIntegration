@@ -82,32 +82,60 @@ define(
 
 							$('#marketBuyBtn').on("click", function(event) {
 								event.preventDefault();
-								var data = {};
-								data["orderType"] = 1;
-								data["amount"] = $('#size').val();
-								data["price"] = -1;
-								data["time"] = new Date().getTime();
-								data["unfulfilled"] = $('#size').val();
+								var order = {};
+								order["orderType"] = 1;
+								order["amount"] = $('#size').val();
+								order["price"] = -1;
+								order["time"] = new Date().getTime();
+								order["unfulfilled"] = $('#size').val();
 								// status 0 -> OK, 10 -> cancelled
-								data["status"] = 0;
-								data["client"] = clientId;
-
+								order["status"] = 0;
+								order["client"] = clientId;
+								
+								
+								var clientData = "clientId="+ clientId;
 								var ajax = $.ajax({
-									type : "POST",
-									url : "http://localhost:8080/order",
-									data : JSON.stringify(data),
+									type : "GET",
+									url : "http://localhost:8080/metadata",
+									data : clientData,
 									dataType : "json",
 									success : function(data) {
-										console.log("success");
+										if ( data[0]["last"] != 0  ) {
+											if ( (data[0]["last"] * order["amount"]) <= data[1]["cash"] ) {
+												var ajax = $.ajax({
+													type : "POST",
+													url : "http://localhost:8080/order",
+													data : JSON.stringify(data),
+													dataType : "json",
+													success : function(data) {
+														console.log("success");
+													}
+												});
+												$('#size').val("");
+												$('#price').val("");												
+											} else {
+												$('#shortSellingAlert').show();
+											}
+											
+										} else {
+											var ajax = $.ajax({
+												type : "POST",
+												url : "http://localhost:8080/order",
+												data : JSON.stringify(data),
+												dataType : "json",
+												success : function(data) {
+													console.log("success");
+												}
+											});
+										}
 									}
 								});
-								$('#size').val("");
-								$('#price').val("");
+								
+								
+
 							});
 
-							$('#marketSellBtn')
-									.on(
-											"click",
+							$('#marketSellBtn').on("click",
 											function(event) {
 												event.preventDefault();
 												var order = {};
@@ -178,27 +206,42 @@ define(
 
 							$('#limitBuyBtn').on("click", function(event) {
 								event.preventDefault();
-								var data = {};
-								data["orderType"] = 3;
-								data["amount"] = $('#size').val();
-								data["price"] = $('#price').val();
-								data["time"] = new Date().getTime();
-								data["unfulfilled"] = $('#size').val();
+								var order = {};
+								order["orderType"] = 3;
+								order["amount"] = $('#size').val();
+								order["price"] = $('#price').val();
+								order["time"] = new Date().getTime();
+								order["unfulfilled"] = $('#size').val();
 								// status 0 -> OK, 10 -> cancelled
-								data["status"] = 0;
-								data["client"] = clientId;
-
+								order["status"] = 0;
+								order["client"] = clientId;
+								
+								var clientData = "clientId="+clientId;
 								var ajax = $.ajax({
-									type : "POST",
-									url : "http://localhost:8080/order",
-									data : JSON.stringify(data),
+									type : "GET",
+									url : "http://localhost:8080/metadata",
+									data : clientData,
 									dataType : "json",
-									success : function(data) {
-										console.log("success");
+									success : function(data) { 
+										if ( order["amount"]*order["price"] <= data[1]["cash"] ) {
+											var ajax = $.ajax({
+												type : "POST",
+												url : "http://localhost:8080/order",
+												data : JSON.stringify(data),
+												dataType : "json",
+												success : function(data) {
+													console.log("success");
+												}
+											});
+											$('#size').val("");
+											$('#price').val("");
+										} else {
+											$('#shortSellingAlert').show();
+										}
 									}
 								});
-								$('#size').val("");
-								$('#price').val("");
+								
+
 							});
 
 							$('#limitSellBtn')
