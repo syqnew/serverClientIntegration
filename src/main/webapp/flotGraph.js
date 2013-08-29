@@ -1,55 +1,79 @@
-function flotGraph(placeholder) {
+var priceGraphInterval, timeLeft, placeholder;
+var priceData = [];
+var bid = [];
+var ask = [];
 
-	var data = [], totalPoints = 300;
+function priceGraph(place, duration) {
+	placeholder = place;
+	timeLeft = duration * 60 * 1000;
+	priceGraphInterval = setInterval(renderPriceGraph, 1000);
 
-	function getRandomData() {
+}
 
-		if (data.length > 0)
-			data = data.slice(1);
+function renderPriceGraph() {
+	if (timeLeft > 0)
+		timeLeft -= 1000;
+	else
+		clearInterval(priceGraphInterval);
+	
+	console.log("past the if else");
 
-		// Do a random walk
+	bid = [];
+	ask = [];
 
-		while (data.length < totalPoints) {
+	var clientRequest = "clientId=" + -1;
+	var ajax = $.ajax({
+		type : "GET",
+		url : "http://localhost:8080/metadata",
+		data : clientRequest,
+		dataType : "json",
+		success : function(data) {
+			if (data) {
+				var currentTime = new Date().getTime();
+				if (data["last"] == 0) {
+					priceData.push([]);
+				} else {
+					priceData.push([ currentTime, data["last"] ]);
+				}
+				if (data["bid"] == -1 || data["bid"] == 0) {
+					bid.push([])
+				} else {
+					bid.push([ currentTime, data["bid"] ]);
+				}
+				if (data["ask"] == -1 || data["ask"] == 0) {
+					ask.push([]);
+				} else {
+					ask.push([ currentTime, data["ask"] ]);
+				}
+				$.plot(placeholder, [ {
+					data : priceData,
+					lines : {
+						show : true
+					},
+					grid : {
+						hoverable : true
+					}
+				}, {
+					data : bid,
+					points : {
+						show : true,
+						radius : 3,
+						symbol : "upsideDownTriangle"
+					},
+					color : "#FF0000"
+				}, {
+					data : ask,
+					points : {
+						show : true,
+						radius : 3,
+						symbol : "triangle"
+					},
+					color : "#FF0000"
+						
+				}
 
-			var prev = data.length > 0 ? data[data.length - 1] : 50, y = prev
-					+ Math.random() * 10 - 5;
-
-			if (y < 0) {
-				y = 0;
-			} else if (y > 100) {
-				y = 100;
+				]);
 			}
-
-			data.push(y);
 		}
-
-		// Zip the generated y values with the x values
-
-		var res = [];
-		for ( var i = 0; i < data.length; ++i) {
-			res.push([ i, data[i] ])
-		}
-
-		return res;
-	}
-
-	var plot = $.plot(placeholder, [{ 
-		data: [ [12, 43], [56, 34], [67, 23] ], 
-		lines : {show: true}
-	}, 
-	{
-		data : [[250, 75], [100,34]], points: {show : true, radius : 3, symbol : "upsideDownTriangle"}, color : "#FF0000" }]);
-
-
-	function update() {
-
-//		plot.setData([ getRandomData() ]);
-
-		// Since the axes don't change, we don't need to call plot.setupGrid()
-
-		plot.draw();
-//		setTimeout(update, 1000);
-	}
-
-	update();
+	});
 }

@@ -46,7 +46,6 @@ function renderTable() {
 				tableData["crlTotal"] = "0";
 			}
 			tableData["total"] = tableData["crlTotal"] + tableData["cashTotal"];
-			console.log(tableData);
 			$('#quotePortfolioTable').html(_quotePortfolioTableTemplate(tableData));
 		}
 	});

@@ -31,17 +31,24 @@ public class MetadataServices {
 	public void getMetadataClient(HttpServletRequest request,
 			HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		List<String> list = new ArrayList<String>();
-		
 		Metadata metadata = dao.findAll().get(0);
-		String clientId = request.getParameter("clientId");
-		int id = Integer.parseInt(clientId);
-		Client client = clientDao.findById(id);
 		
-		list.add(mapper.writeValueAsString(metadata));
-		list.add(mapper.writeValueAsString(client));
+		if ( request.getParameter("clientId").equals("-1") ) {
+			response.getWriter().println(mapper.writeValueAsString(metadata));
+			
+		} else {
+			List<String> list = new ArrayList<String>();
+			
+			String clientId = request.getParameter("clientId");
+			int id = Integer.parseInt(clientId);
+			Client client = clientDao.findById(id);
+			
+			list.add(mapper.writeValueAsString(metadata));
+			list.add(mapper.writeValueAsString(client));
+			
+			response.getWriter().println(list);
+		}
 		
-		response.getWriter().println(list);
 	}
 
 }
