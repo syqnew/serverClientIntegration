@@ -8,7 +8,9 @@ require
 				'underscore' : [ "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min" ],
 				'text' : [ "//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.10/text" ],
 				'flot' : [ "//cdnjs.cloudflare.com/ajax/libs/flot/0.8.1/jquery.flot.min" ],
-				'flotTime' : "js/jquery.flot.time"
+				'flotTime' : "js/jquery.flot.time",
+				'd3' : [ "//cdnjs.cloudflare.com/ajax/libs/d3/3.2.2/d3.v3.min" ],
+				'flotCategories' : "js/jquery.flot.categories"
 			},
 			shim : {
 				"bootstrap" : {
@@ -28,6 +30,13 @@ require
 				"flotTime" : {
 					deps : [ "jquery", "flot" ],
 					exports : 'flotTime'
+				},
+				"flotCategories" : {
+					deps : [ "jquery", "flot" ],
+					exports : 'flotCategories'
+				},
+				"d3" : {
+					exports : 'd3'
 				}
 			}
 		});

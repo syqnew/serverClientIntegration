@@ -1,6 +1,7 @@
 package com.github.syqnew.services;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,12 +23,14 @@ public class SaleServices {
 		dao = new SaleDaoImpl();
 	}
 	
-	public void getClientSales(HttpServletRequest request, HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException {
-		String clientId = request.getParameter("clientId");
-		int id = Integer.parseInt(clientId);
+	public void getSales(HttpServletRequest request, HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException {
+		List<String> list = new ArrayList<String>();
 		ObjectMapper mapper = new ObjectMapper();		
-		List<Sale> sales = dao.findByClient(id);
-		response.getWriter().println(mapper.writeValueAsString(sales));
+		List<Sale> sales = dao.findAll();
+		for (Sale sale : sales) {
+			list.add(mapper.writeValueAsString(sale));
+		}
+		response.getWriter().println(list);
 	}
 
 }

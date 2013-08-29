@@ -17,7 +17,7 @@ public class SaleServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		response.setStatus(HttpServletResponse.SC_OK);
-		saleServices.getClientSales(request, response);
+		saleServices.getSales(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request,

@@ -1,10 +1,10 @@
-define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
+define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 		'text!templates/student.template', 'text!templates/graph.template',
 		'text!templates/timer.template', 'text!templates/openOrders.template',
 		'text!templates/news.template', 'text!templates/quotePortfolioTable.template', 
-		'../timer', '../news', '../updateTable', '../flotGraph',
-		'../trading', 'flotTime', 'bootstrap' ], function(App, $, _, Backbone,
-		Handlebars, flot, studentTemplate, graphTemplate, timerTemplate,
+		'../timer', '../news', '../updateTable', '../volumeGraph',  '../flotGraph',
+		'../trading', 'flot', 'flotTime', 'flotCategories', 'd3', 'bootstrap' ], function(App, $, _, Backbone,
+		Handlebars, studentTemplate, graphTemplate, timerTemplate,
 		openOrdersTemplate, newsTemplate, quotePortfolioTableTemplate) {
 
 	_studentTemplate = Handlebars.compile(studentTemplate);
@@ -24,6 +24,8 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 	var StudentView = Backbone.View.extend({
 		el : $('#loginModal'),
 		render : function(email) {
+			//testin
+			
 			initialTemplate["email"] = email;
 			$('#loginModal').html(_studentTemplate(initialTemplate));
 			$('#shortSellingAlert').hide();
@@ -48,6 +50,9 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'flot',
 				"total" : 10000
 			}));
 			$('button').prop('disabled', true);
+
+			makeVolumeGraph('#placeholder2');
+			flotGraph('#placeholder');
 			
 			// get id assigned to this client
 			var clientData = "email=" + email;
