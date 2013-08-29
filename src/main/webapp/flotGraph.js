@@ -33,30 +33,22 @@ function flotGraph(placeholder) {
 		return res;
 	}
 
-	var plot = $.plot(placeholder, [ getRandomData() ], {
-		series : {
-			shadowSize : 0
-		// Drawing is faster without shadows
-		},
-		yaxis : {
-			min : 0,
-			max : 100
-		},
-		xaxis : {
-			mode: "time",
-			minTickSize: [1, "second"],
-			timeformat: "%m/%d/%y"
-		}
-	});
+	var plot = $.plot(placeholder, [{ 
+		data: [ [12, 43], [56, 34], [67, 23] ], 
+		lines : {show: true}
+	}, 
+	{
+		data : [[250, 75], [100,34]], points: {show : true, radius : 3, symbol : "upsideDownTriangle"}, color : "#FF0000" }]);
+
 
 	function update() {
 
-		plot.setData([ getRandomData() ]);
+//		plot.setData([ getRandomData() ]);
 
 		// Since the axes don't change, we don't need to call plot.setupGrid()
 
 		plot.draw();
-		setTimeout(update, 1000);
+//		setTimeout(update, 1000);
 	}
 
 	update();

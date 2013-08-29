@@ -3,7 +3,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 		'text!templates/timer.template', 'text!templates/openOrders.template',
 		'text!templates/news.template', 'text!templates/quotePortfolioTable.template', 
 		'../timer', '../news', '../updateTable', '../volumeGraph',  '../flotGraph',
-		'../trading', 'flot', 'flotTime', 'd3', 'bootstrap' ], function(App, $, _, Backbone,
+		'../trading', 'flot', 'flotTime', 'flotSymbol', 'bootstrap' ], function(App, $, _, Backbone,
 		Handlebars, studentTemplate, graphTemplate, timerTemplate,
 		openOrdersTemplate, newsTemplate, quotePortfolioTableTemplate) {
 

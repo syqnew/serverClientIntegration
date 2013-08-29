@@ -9,7 +9,7 @@ require
 				'text' : [ "//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.10/text" ],
 				'flot' : [ "//cdnjs.cloudflare.com/ajax/libs/flot/0.8.1/jquery.flot.min" ],
 				'flotTime' : "js/jquery.flot.time",
-				'd3' : [ "//cdnjs.cloudflare.com/ajax/libs/d3/3.2.2/d3.v3.min" ],
+				'flotSymbol' : "js/jquery.flot.symbol"
 			},
 			shim : {
 				"bootstrap" : {
@@ -30,8 +30,9 @@ require
 					deps : [ "jquery", "flot" ],
 					exports : 'flotTime'
 				},
-				"d3" : {
-					exports : 'd3'
+				"flotSymbol" : {
+					deps : [ "jquery", "flot" ],
+					exports : 'flotSymbol'
 				}
 			}
 		});
