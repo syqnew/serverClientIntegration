@@ -46,18 +46,25 @@ News.prototype.getStage1News = function() {
 	}, (this.duration * 60 * 1000) + 800);
 }
 
-News.prototype.getStage2News = function() {
-	console.log("this.temp " + this.temp);
-	var outer = {};
-	var inner1 = {"new": "Market is open"};
-	var inner2 = {};
-	inner2["new"] = this.temp;
-	var list = [];
-	list.push(inner2);
-	list.push(inner1);
-	outer["news"] = list;
+News.prototype.getStage2News = function(newsTmp) {	
+	var requestString = "id=" + ((this.clientId % 4) + 4);
+	var ajax = $.ajax({
+		type : "GET",
+		url : "http://localhost:8080/news",
+		data : requestString,
+		dataType : "json",
+		success : function(data) {
+			this.temp = data["message"];
+			$('#marketNews').html(_newsTemplate({
+				"news" : [ {
+					"new" : this.temp
+				}, {
+					"new" : "Market is open"
+				} ]
+			}));
+		}
+	});
 
-	$('#marketNews').html(_newsTemplate(outer));
 	var t = setTimeout(function() {
 		var requestString = "id=" + ((this.clientId % 4) + 8);
 		var ajax = $.ajax({
