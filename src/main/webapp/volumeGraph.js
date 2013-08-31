@@ -1,6 +1,6 @@
 var graphInterval, duration, timeLeft;
 
-function makeVolumeGraph(placeholder, duration) {
+function makeVolumeGraph(duration) {
 
 	timeLeft = duration * 60 * 1000;
 	graphInterval = setInterval(renderVolumeGraph, 1000);
@@ -13,7 +13,7 @@ function renderVolumeGraph() {
 		clearInterval(graphInterval);
 	}
 
-	var data = [];
+	var dataSet = [];
 
 	var ajax = $.ajax({
 		type : "GET",
@@ -21,23 +21,21 @@ function renderVolumeGraph() {
 		dataType : "json",
 		success : function(data) {
 			for ( var ct = 0; ct < data.length; ct++) {
-				list.push([ data[ct]["time"], data[ct]["amount"] ]);
+				dataSet.push([ data[ct]["time"], data[ct]["amount"] ]);
 			}
-			if (data.length > 0) {
-				$.plot(placeholder, [ data ], {
-					series : {
-						bars : {
-							show : true,
-							barWidth : 0.6,
-							align : "center"
-						}
-					},
-					xaxis : {
-						mode : "time",
-						timeformat : "%H:%M:%S"
+			$.plot('#placeholder2', [ dataSet ], {
+				series : {
+					bars : {
+						show : true,
+						barWidth : 0.6,
+						align : "center"
 					}
-				});
-			}
+				},
+				xaxis : {
+					mode : "time",
+					timeformat : "%H:%M:%S"
+				}
+			});
 
 		}
 	});

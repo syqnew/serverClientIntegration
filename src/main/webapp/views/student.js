@@ -1,27 +1,31 @@
 define(
 		[ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 				'text!templates/student.template',
-				'text!templates/graph.template',
+				'text!templates/priceGraph.template',
 				'text!templates/timer.template',
 				'text!templates/openOrders.template',
 				'text!templates/news.template',
-				'text!templates/quotePortfolioTable.template', '../timer',
+				'text!templates/quotePortfolioTable.template', 
+				'text!templates/cancelOrder.template', 
+				'text!templates/volumeGraph.template', '../timer',
 				'../news', '../updateTable', '../volumeGraph', '../flotGraph',
 				'../trading', 'flot', 'flotTime', 'flotSymbol', 'bootstrap' ],
 		function(App, $, _, Backbone, Handlebars, studentTemplate,
-				graphTemplate, timerTemplate, openOrdersTemplate, newsTemplate,
-				quotePortfolioTableTemplate) {
+				priceGraphTemplate, timerTemplate, openOrdersTemplate, newsTemplate,
+				quotePortfolioTableTemplate, cancelOrderTemplate, volumeGraphTemplate) {
 
 			_studentTemplate = Handlebars.compile(studentTemplate);
-			_graphTemplate = Handlebars.compile(graphTemplate);
+			_priceGraphTemplate = Handlebars.compile(priceGraphTemplate);
 			_timerTemplate = Handlebars.compile(timerTemplate);
 			_openOrdersTemplate = Handlebars.compile(openOrdersTemplate);
 			_newsTemplate = Handlebars.compile(newsTemplate);
 			_quotePortfolioTableTemplate = Handlebars
 					.compile(quotePortfolioTableTemplate);
+			_cancelOrderTemplate = Handlebars.compile(cancelOrderTemplate);
+			_volumeGraphTemplate = Handlebars.compile(volumeGraphTemplate);
 
 			var marketYear = 0;
-			var marketInterval, clientId, news;
+			var marketInterval, clientId, news, trading;
 			var initialTemplate = {};
 			initialTemplate["news"] = [ {
 				"new" : "Market is closed."
@@ -37,7 +41,8 @@ define(
 							$('#loginModal').html(
 									_studentTemplate(initialTemplate));
 							$('#shortSellingAlert').hide();
-							$('#graph').html(_graphTemplate());
+//							$('#priceGraph').html(_priceGraphTemplate());
+//							$('#volumeGraph').html(_volumeGraphTemplate());
 							$('#marketNews').html(_newsTemplate({
 								"news" : [ {
 									"new" : "Market is closed"
@@ -59,6 +64,8 @@ define(
 										"total" : 10000
 									}));
 							$('button').prop('disabled', true);
+							$('#openOrders').html(_openOrdersTemplate([]));
+							$('#cancelOrder').html(_cancelOrderTemplate([]));
 
 							// get id assigned to this client
 							var clientData = "email=" + email;
@@ -80,62 +87,93 @@ define(
 								}
 							});
 
-							$('#marketBuyBtn').on("click", function(event) {
-								event.preventDefault();
-								var order = {};
-								order["orderType"] = 1;
-								order["amount"] = $('#size').val();
-								order["price"] = -1;
-								order["time"] = new Date().getTime();
-								order["unfulfilled"] = $('#size').val();
-								// status 0 -> OK, 10 -> cancelled
-								order["status"] = 0;
-								order["client"] = clientId;
-								
-								
-								var clientData = "clientId="+ clientId;
-								var ajax = $.ajax({
-									type : "GET",
-									url : "http://localhost:8080/metadata",
-									data : clientData,
-									dataType : "json",
-									success : function(data) {
-										if ( data[0]["last"] != 0  ) {
-											if ( (data[0]["last"] * order["amount"]) <= data[1]["cash"] ) {
-												var ajax2 = $.ajax({
-													type : "POST",
-													url : "http://localhost:8080/order",
-													data : JSON.stringify(data),
-													dataType : "json",
-													success : function(data) {
-														console.log("success");
-													}
-												});
-												$('#size').val("");
-												$('#price').val("");												
-											} else {
-												$('#shortSellingAlert').show();
-											}
-											
-										} else {
-											var ajax2 = $.ajax({
-												type : "POST",
-												url : "http://localhost:8080/order",
-												data : JSON.stringify(data),
-												dataType : "json",
-												success : function(data) {
-													console.log("success");
-												}
+							$('#marketBuyBtn')
+									.on(
+											"click",
+											function(event) {
+												event.preventDefault();
+												var order = {};
+												order["orderType"] = 1;
+												order["amount"] = $('#size')
+														.val();
+												order["price"] = -1;
+												order["time"] = new Date()
+														.getTime();
+												order["unfulfilled"] = $(
+														'#size').val();
+												// status 0 -> OK, 10 ->
+												// cancelled
+												order["status"] = 0;
+												order["client"] = clientId;
+
+												var clientData = "clientId="
+														+ clientId;
+												var ajax = $
+														.ajax({
+															type : "GET",
+															url : "http://localhost:8080/metadata",
+															data : clientData,
+															dataType : "json",
+															success : function(
+																	data) {
+																if (data[0]["last"] != 0) {
+																	if ((data[0]["last"] * order["amount"]) <= data[1]["cash"]) {
+																		var ajax2 = $
+																				.ajax({
+																					type : "POST",
+																					url : "http://localhost:8080/order",
+																					data : JSON
+																							.stringify(order),
+																					dataType : "json",
+																					success : function(
+																							data) {
+																						console
+																								.log("success");
+																					}
+																				});
+																		$(
+																				'#size')
+																				.val(
+																						"");
+																		$(
+																				'#price')
+																				.val(
+																						"");
+																	} else {
+																		$(
+																				'#shortSellingAlert')
+																				.show();
+																	}
+
+																} else {
+																	var ajax2 = $
+																			.ajax({
+																				type : "POST",
+																				url : "http://localhost:8080/order",
+																				data : JSON
+																						.stringify(order),
+																				dataType : "json",
+																				success : function(
+																						data) {
+																					console
+																							.log("success");
+																				}
+																			});
+																	$('#size')
+																			.val(
+																					"");
+																	$('#price')
+																			.val(
+																					"");
+																}
+															}
+														});
+
 											});
-										}
-									}
-								});
-								
-								
 
-							});
-
-							$('#marketSellBtn').on("click",
+							$('#marketSellBtn')
+									.on(
+											"click",
 											function(event) {
 												event.preventDefault();
 												var order = {};
@@ -204,45 +242,66 @@ define(
 
 											});
 
-							$('#limitBuyBtn').on("click", function(event) {
-								event.preventDefault();
-								var order = {};
-								order["orderType"] = 3;
-								order["amount"] = $('#size').val();
-								order["price"] = $('#price').val();
-								order["time"] = new Date().getTime();
-								order["unfulfilled"] = $('#size').val();
-								// status 0 -> OK, 10 -> cancelled
-								order["status"] = 0;
-								order["client"] = clientId;
-								
-								var clientData = "clientId="+clientId;
-								var ajax = $.ajax({
-									type : "GET",
-									url : "http://localhost:8080/metadata",
-									data : clientData,
-									dataType : "json",
-									success : function(data) { 
-										if ( order["amount"]*order["price"] <= data[1]["cash"] ) {
-											var ajax2 = $.ajax({
-												type : "POST",
-												url : "http://localhost:8080/order",
-												data : JSON.stringify(data),
-												dataType : "json",
-												success : function(data) {
-													console.log("success");
-												}
-											});
-											$('#size').val("");
-											$('#price').val("");
-										} else {
-											$('#shortSellingAlert').show();
-										}
-									}
-								});
-								
+							$('#limitBuyBtn')
+									.on(
+											"click",
+											function(event) {
+												event.preventDefault();
+												var order = {};
+												order["orderType"] = 3;
+												order["amount"] = $('#size')
+														.val();
+												order["price"] = $('#price')
+														.val();
+												order["time"] = new Date()
+														.getTime();
+												order["unfulfilled"] = $(
+														'#size').val();
+												// status 0 -> OK, 10 ->
+												// cancelled
+												order["status"] = 0;
+												order["client"] = clientId;
 
-							});
+												var clientData = "clientId="
+														+ clientId;
+												var ajax = $
+														.ajax({
+															type : "GET",
+															url : "http://localhost:8080/metadata",
+															data : clientData,
+															dataType : "json",
+															success : function(
+																	data) {
+																if (order["amount"]
+																		* order["price"] <= data[1]["cash"]) {
+																	var ajax2 = $
+																			.ajax({
+																				type : "POST",
+																				url : "http://localhost:8080/order",
+																				data : JSON
+																						.stringify(order),
+																				dataType : "json",
+																				success : function(
+																						data) {
+																					console
+																							.log("success");
+																				}
+																			});
+																	$('#size')
+																			.val(
+																					"");
+																	$('#price')
+																			.val(
+																					"");
+																} else {
+																	$(
+																			'#shortSellingAlert')
+																			.show();
+																}
+															}
+														});
+
+											});
 
 							$('#limitSellBtn')
 									.on(
@@ -303,6 +362,13 @@ define(
 														});
 
 											});
+							
+							$('#cancelOrderBtn').on('click', function(event){
+								event.preventDefault();
+								var e = document.getElementById("openOrdersCancel");
+								var selected = e.options[e.selectedIndex].value;
+								console.log(selected);
+							});
 
 						}
 					});
@@ -326,17 +392,20 @@ define(
 							news.getStage1News();
 							var timer = new TraderTimer();
 							timer.countdown(data["duration"], '#studentTimer');
-							tradingOpen(data["duration"], clientId);
-							makeVolumeGraph('#placeholder2', data["duration"]);
-							priceGraph('#placeholder', data["duration"]);
+							var trading = new Trading(data["duration"], clientId);
+							trading.startTrading();
+							priceGraph(data["duration"]);
+							makeVolumeGraph(data["duration"]);
 						} else if (data["year"] == 2 && marketYear == 1) {
 							clearInterval(marketInterval);
 							marketYear = data["year"];
 							news.getStage2News();
 							var timer = new TraderTimer();
 							timer.countdown(data["duration"], '#studentTimer');
-							makeVolumeGraph('#placeholder2'), data["duration"];
-							priceGraph('#placeholder', data["duration"]);
+							var trading = new Trading(data["duration"], clientId);
+							trading.startTrading();
+							priceGraph(data["duration"]);
+							makeVolumeGraph(data["duration"]);
 						}
 					}
 				});

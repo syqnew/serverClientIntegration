@@ -1,8 +1,7 @@
 <table class="table table-condensed" id="openOrdersTable">
-	{{#each orders}}
+	{{#each this}}
 	<tr>
-		<td>{{order}}<td>
-		<td><button class="btn btn-warning" id={{id}}>Cancel</button></td>
+		<td>{{order}}</td>
 	</tr>
 	{{/each}}
 </table>

@@ -1,10 +1,9 @@
-var priceGraphInterval, timeLeft, placeholder;
+var priceGraphInterval, timeLeft;
 var priceData = [];
 var bid = [];
 var ask = [];
 
 function priceGraph(place, duration) {
-	placeholder = place;
 	timeLeft = duration * 60 * 1000;
 	priceGraphInterval = setInterval(renderPriceGraph, 1000);
 
@@ -45,10 +44,12 @@ function renderPriceGraph() {
 				} else {
 					ask.push([ currentTime, data["ask"] ]);
 				}
-				$.plot(placeholder, [ {
+				$.plot('#placeholder', [ {
 					data : priceData,
 					lines : {
-						show : true
+						show : true,
+						fill : false,
+						fillColor : null
 					},
 					grid : {
 						hoverable : true

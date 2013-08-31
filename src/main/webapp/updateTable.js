@@ -16,6 +16,7 @@ function renderTable() {
 	var tableData = {};
 	
 	var clientData = "clientId=" + clientId;
+	console.log(clientId);
 	var ajax = $.ajax({
 		type : "GET",
 		url : "http://localhost:8080/metadata",

@@ -1,5 +1,4 @@
 function News(duration, clientId) {
-	console.log(clientId);
 	this.duration = duration;
 	this.clientId = clientId;
 	this.temp = "";

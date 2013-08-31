@@ -1,0 +1,9 @@
+<div class="row-fluid">
+	<select id="openOrdersCancel">
+		{{#each this}}
+		<option value={{value}}>{{order}}</option>
+		{{/each}}
+	</select>
+	
+	<button class="btn btn-warning" id="cancelOrderBtn">Cancel</button>
+</div>
