@@ -4,9 +4,8 @@
 
 
 <div class="row-fluid">
-	<div class="span1"></div>
   	
-  	<div class="span5">
+  	<div class="span6 offset1">
   	
   		<div id="marketNews"></div>
 		
@@ -20,7 +19,7 @@
 		
   	</div>
   	
-  	<div class="span4">
+  	<div class="span5">
   	
 		
 		<div>
