@@ -27,13 +27,16 @@ function renderVolumeGraph() {
 				series : {
 					bars : {
 						show : true,
-						barWidth : 0.6,
+						barWidth : 0.5,
 						align : "center"
 					}
 				},
 				xaxis : {
 					mode : "time",
 					timeformat : "%H:%M:%S"
+				},
+				yaxis : {
+					min: 0
 				}
 			});
 
