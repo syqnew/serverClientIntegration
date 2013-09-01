@@ -1,7 +1,5 @@
-<table class="table table-condensed" id="openOrdersTable">
+<div id="openOrdersTable">
 	{{#each this}}
-	<tr>
-		<td>{{order}}</td>
-	</tr>
+	<p>{{order}}</p>
 	{{/each}}
-</table>
+</dic>

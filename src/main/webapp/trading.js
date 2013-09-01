@@ -69,8 +69,8 @@ Trading.prototype.checkForUpdates = function() {
 								// type : "POST",
 								// url :
 								// "http://localhost:8080/sale",
-								// data : data[ct],
 								// dataType : "json"
+								// data : data[ct],
 								// });
 							}
 

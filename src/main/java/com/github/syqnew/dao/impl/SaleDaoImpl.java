@@ -24,6 +24,7 @@ public class SaleDaoImpl extends BaseDaoImpl<Sale> implements SaleDao {
 
 		Query query = session.createQuery("FROM " + Sale.class.getName()
 				+ " WHERE buyerId = :id OR sellerId = :id");
+		query.setParameter("id", id);
 		List<Sale> sales = query.list();
 		session.flush();
 		session.close();

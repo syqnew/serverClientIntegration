@@ -75,8 +75,7 @@
 			<div class="modal-header">
 	  			<h4>Transactions</h4>
 			</div>
-				<div class="modal-body">
-					<p>Stuff goes here</p>
+				<div class="modal-body" id="transactionBlock">
 				</div>
 			</div>
 		<div>

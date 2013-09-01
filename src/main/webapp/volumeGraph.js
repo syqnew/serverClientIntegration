@@ -15,9 +15,11 @@ function renderVolumeGraph() {
 
 	var dataSet = [];
 
+	var clientRequest = "clientId=" + "-1";
 	var ajax = $.ajax({
 		type : "GET",
 		url : "http://localhost:8080/sale",
+		data : clientRequest,
 		dataType : "json",
 		success : function(data) {
 			for ( var ct = 0; ct < data.length; ct++) {

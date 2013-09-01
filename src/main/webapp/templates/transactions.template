@@ -1,0 +1,5 @@
+<div id="transactions">
+	{{#each this}}
+	<p>{{this}}</p>
+	{{/each}}
+</div>

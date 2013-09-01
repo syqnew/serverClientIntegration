@@ -32,16 +32,28 @@ public class SaleServices {
 	public void getSales(HttpServletRequest request,
 			HttpServletResponse response) throws JsonGenerationException,
 			JsonMappingException, IOException {
-		List<String> list = new ArrayList<String>();
 		ObjectMapper mapper = new ObjectMapper();
-		List<Sale> sales = dao.findAll();
-		for (Sale sale : sales) {
-			list.add(mapper.writeValueAsString(sale));
+		List<String> list = new ArrayList<String>();
+		String clientId = request.getParameter("clientId");
+		int id = Integer.parseInt(clientId);
+		if (id == -1) {
+			List<Sale> sales = dao.findAll();
+			for (Sale sale : sales) {
+				list.add(mapper.writeValueAsString(sale));
+			}
+			response.getWriter().println(list);
+		} else {
+
+			List<Sale> sales = dao.findByClient(id);
+			for (Sale sale : sales) {
+				list.add(mapper.writeValueAsString(sale));
+			}
+			response.getWriter().println(list);
 		}
-		response.getWriter().println(list);
 	}
 
-	public void cancelOrder(HttpServletRequest request, HttpServletResponse response) throws JsonParseException, JsonMappingException, IOException {
+	public void cancelOrder(HttpServletRequest request, HttpServletResponse response) throws JsonParseException,
+			JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		MarketOrder order = mapper.readValue(request.getReader(), MarketOrder.class);
 		order.cancelOrder();
