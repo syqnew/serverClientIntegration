@@ -1,9 +1,10 @@
-var priceGraphInterval, timeLeft;
+var priceGraphInterval, timeLeft, min;
 var priceData = [];
 var bid = [];
 var ask = [];
 
 function priceGraph(place, duration) {
+	min = new Date().getTime();
 	timeLeft = duration * 60 * 1000;
 	priceGraphInterval = setInterval(renderPriceGraph, 1000);
 
@@ -14,7 +15,7 @@ function renderPriceGraph() {
 		timeLeft -= 1000;
 	else
 		clearInterval(priceGraphInterval);
-	
+
 	console.log("past the if else");
 
 	bid = [];
@@ -70,11 +71,19 @@ function renderPriceGraph() {
 						symbol : "triangle"
 					},
 					color : "#FF0000"
-						
+
 				}
 
-				]);
+				], {
+					xaxis : {
+						mode : "time",
+						timeformat : "%H:%M:%S",
+						min : min
+					}
+				});
 			}
 		}
 	});
 }
+
+

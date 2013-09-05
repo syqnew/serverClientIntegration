@@ -1,6 +1,7 @@
-var graphInterval, duration, timeLeft;
+var graphInterval, duration, timeLeft, min;
 
 function makeVolumeGraph(duration) {
+	min = new Date().getTime();
 
 	timeLeft = duration * 60 * 1000;
 	graphInterval = setInterval(renderVolumeGraph, 1000);
@@ -35,7 +36,8 @@ function renderVolumeGraph() {
 				},
 				xaxis : {
 					mode : "time",
-					timeformat : "%H:%M:%S"
+					timeformat : "%H:%M:%S", 
+					min : min
 				},
 				yaxis : {
 					min: 0

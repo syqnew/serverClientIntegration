@@ -260,8 +260,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 
 			$('#cancelOrderBtn').on('click', function(event) {
 				event.preventDefault();
-				var e = document.getElementById("openOrdersCancel");
-				var selected = e.options[e.selectedIndex].value;
+				var selected = $('#openOrdersCancel').children(':selected');
 				console.log(selected);
 			});
 

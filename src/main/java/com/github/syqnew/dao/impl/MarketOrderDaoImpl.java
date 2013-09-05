@@ -54,18 +54,32 @@ public class MarketOrderDaoImpl extends BaseDaoImpl<MarketOrder> implements
 		return orders;
 	}
 
-	public List<MarketOrder> getMarketOrders() {
-		SessionFactory sf = HibernateUtil.getSessionFactory();
-		Session session = sf.openSession();
+	public List<MarketOrder> getMarketBuys() {
+			SessionFactory sf = HibernateUtil.getSessionFactory();
+			Session session = sf.openSession();
 
-		Query query = session
-				.createQuery("FROM "
-						+ MarketOrder.class.getName()
-						+ " WHERE status = 0 AND orderType = 1 OR orderType = 2 ORDER BY time ASC");
-		List<MarketOrder> orders = query.list();
-		session.flush();
-		session.close();
-		return orders;
+			Query query = session
+					.createQuery("FROM "
+							+ MarketOrder.class.getName()
+							+ " WHERE status = 0 AND orderType = 1 ORDER BY time ASC");
+			List<MarketOrder> orders = query.list();
+			session.flush();
+			session.close();
+			return orders;
+	}
+
+	public List<MarketOrder> getMarketSells() {
+			SessionFactory sf = HibernateUtil.getSessionFactory();
+			Session session = sf.openSession();
+
+			Query query = session
+					.createQuery("FROM "
+							+ MarketOrder.class.getName()
+							+ " WHERE status = 0 AND orderType = 2 ORDER BY time ASC");
+			List<MarketOrder> orders = query.list();
+			session.flush();
+			session.close();
+			return orders;
 	}
 
 }
