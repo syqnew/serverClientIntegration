@@ -10,6 +10,13 @@ import com.github.syqnew.HibernateUtil;
 import com.github.syqnew.dao.MarketOrderDao;
 import com.github.syqnew.domain.MarketOrder;
 
+/**
+ * 
+ * @author snew Note that this class encompasses not only Market Orders but also
+ *         Limit Orders. It is named like this because Order is a reserved key
+ *         word in mySQL, and with Hibernate the name of the database object
+ *         must match the name of the table in mySQL
+ */
 public class MarketOrderDaoImpl extends BaseDaoImpl<MarketOrder> implements
 		MarketOrderDao {
 
@@ -55,31 +62,31 @@ public class MarketOrderDaoImpl extends BaseDaoImpl<MarketOrder> implements
 	}
 
 	public List<MarketOrder> getMarketBuys() {
-			SessionFactory sf = HibernateUtil.getSessionFactory();
-			Session session = sf.openSession();
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();
 
-			Query query = session
-					.createQuery("FROM "
-							+ MarketOrder.class.getName()
-							+ " WHERE status = 0 AND orderType = 1 ORDER BY time ASC");
-			List<MarketOrder> orders = query.list();
-			session.flush();
-			session.close();
-			return orders;
+		Query query = session
+				.createQuery("FROM "
+						+ MarketOrder.class.getName()
+						+ " WHERE status = 0 AND orderType = 1 ORDER BY time ASC");
+		List<MarketOrder> orders = query.list();
+		session.flush();
+		session.close();
+		return orders;
 	}
 
 	public List<MarketOrder> getMarketSells() {
-			SessionFactory sf = HibernateUtil.getSessionFactory();
-			Session session = sf.openSession();
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();
 
-			Query query = session
-					.createQuery("FROM "
-							+ MarketOrder.class.getName()
-							+ " WHERE status = 0 AND orderType = 2 ORDER BY time ASC");
-			List<MarketOrder> orders = query.list();
-			session.flush();
-			session.close();
-			return orders;
+		Query query = session
+				.createQuery("FROM "
+						+ MarketOrder.class.getName()
+						+ " WHERE status = 0 AND orderType = 2 ORDER BY time ASC");
+		List<MarketOrder> orders = query.list();
+		session.flush();
+		session.close();
+		return orders;
 	}
 
 }

@@ -15,5 +15,6 @@ public interface MarketOrderDao extends BaseDao<MarketOrder> {
 	List<MarketOrder> getMarketBuys();
 
 	List<MarketOrder> getMarketSells();
+	
 
 }
