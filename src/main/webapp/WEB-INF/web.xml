@@ -40,15 +40,6 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>MarketMakerServlet</servlet-name>
-		<servlet-class>com.github.syqnew.servlets.MarketMakerServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>MarketMakerServlet</servlet-name>
-		<url-pattern>/marketMaker/*</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
 		<servlet-name>NewsServlet</servlet-name>
 		<servlet-class>com.github.syqnew.servlets.NewsServlet</servlet-class>
 	</servlet>
