@@ -57,6 +57,43 @@ public class OrderServices {
 		ObjectMapper mapper = new ObjectMapper();
 		MarketOrder order = mapper.readValue(request.getReader(), MarketOrder.class);
 		orderDao.persist(order);
+
+		// handle most recent order
+		int orderType = order.getOrderType();
+		switch (orderType) {
+		
+		// Market Buy
+		case 1:
+			List<MarketOrder> askOrders = orderDao.getLimitSells();
+			List<MarketOrder> buyOrders = orderDao.getMarketBuys();
+			matchMarketOrders(askOrders, buyOrders, false);
+			break;
+			
+		// Market Sell
+		case 2:
+			List<MarketOrder> bidOrders = orderDao.getLimitBuys();
+			List<MarketOrder> sellOrders = orderDao.getMarketSells();
+			matchMarketOrders(bidOrders, sellOrders, true);
+			break;
+			
+		// Limit Buy
+		case 3:
+			List<MarketOrder> bidOrders2 = orderDao.getLimitBuys();
+			List<MarketOrder> sellOrders2 = orderDao.getMarketSells();
+			matchMarketOrders(bidOrders2, sellOrders2, true);
+			List<MarketOrder> askOrders2 = orderDao.getLimitSells();
+			matchLimitOrders(bidOrders2, askOrders2, false);
+			break;
+			
+		// Limit Sell
+		case 4:
+			List<MarketOrder> askOrders3 = orderDao.getLimitSells();
+			List<MarketOrder> buyOrders2 = orderDao.getMarketBuys();
+			matchMarketOrders(askOrders3, buyOrders2, false);
+			List<MarketOrder> bidOrders3 = orderDao.getLimitBuys();
+			matchLimitOrders(bidOrders3, askOrders3, true);
+			break;
+		}
 	}
 
 	protected void matchMarketOrders(List<MarketOrder> priceOrders, List<MarketOrder> marketOrders,
@@ -75,7 +112,7 @@ public class OrderServices {
 		int amountAtPrice = bestAtPrice.getUnfulfilled();
 		if (amount > amountAtPrice)
 			amount = amountAtPrice;
-		
+
 		long currentTime = new Date().getTime();
 
 		// fulfill the orders
@@ -98,63 +135,68 @@ public class OrderServices {
 		}
 		clientDao.merge(limitClient);
 		clientDao.merge(marketClient);
-		
+
 		// record the sale
 		Sale sale;
 		if (sellAtMarketPrice) {
-			sale = new Sale(limitClientId, marketClientId, amount, price, currentTime, bestAtPrice.getId(), firstAtMarket.getId());
+			sale = new Sale(limitClientId, marketClientId, amount, price, currentTime, bestAtPrice.getId(),
+					firstAtMarket.getId());
 		} else {
-			sale = new Sale(marketClientId, limitClientId, amount, price, currentTime, firstAtMarket.getId(), bestAtPrice.getId());
+			sale = new Sale(marketClientId, limitClientId, amount, price, currentTime, firstAtMarket.getId(),
+					bestAtPrice.getId());
 		}
 		saleDao.persist(sale);
-		
+
 		// update the metadata
 		Metadata metadata = metadataDao.findAll().get(0);
 		metadata.addToVolume(amount);
 		if (metadata.getHigh() < price) {
 			metadata.setHigh(price);
-		} 
-		if (metadata.getLow() > price){
+		}
+		if (metadata.getLow() > price) {
 			metadata.setLow(price);
 		}
 		metadata.setLast(price);
 		metadataDao.merge(metadata);
-		
-		//TODO create a quote
+
+		// TODO create a quote
 	}
-	
+
 	protected void matchLimitOrders(List<MarketOrder> bidOrders, List<MarketOrder> askOrders, boolean sellInitiated) {
-		
+
 		// make sure that there are both ask and bid orders
-		if (bidOrders.size() == 0 || askOrders.size() == 0) return;
-		
+		if (bidOrders.size() == 0 || askOrders.size() == 0)
+			return;
+
 		MarketOrder bestBid = bidOrders.get(0);
 		MarketOrder bestAsk = askOrders.get(0);
-		
+
 		int bidPrice = bestBid.getPrice();
 		int askPrice = bestAsk.getPrice();
-		
-		if (bidPrice != askPrice) return;
-		
+
+		if (bidPrice != askPrice)
+			return;
+
 		int price;
 		if (sellInitiated) {
 			price = bidPrice;
 		} else {
 			price = askPrice;
 		}
-		
+
 		int amount = bestBid.getUnfulfilled();
 		int amountAsk = bestAsk.getUnfulfilled();
-		if(amount > amountAsk) amount = amountAsk;
-		
+		if (amount > amountAsk)
+			amount = amountAsk;
+
 		long currentTime = new Date().getTime();
-		
+
 		// fulfill the orders
 		bestBid.fulfillOrder(amount);
 		bestAsk.fulfillOrder(amount);
 		orderDao.merge(bestBid);
 		orderDao.merge(bestAsk);
-		
+
 		// update client assets
 		int bidClientId = bestBid.getClient();
 		int askClientId = bestAsk.getClient();
@@ -164,11 +206,11 @@ public class OrderServices {
 		askClient.sellShares(amount, price * amount);
 		clientDao.merge(bidClient);
 		clientDao.merge(askClient);
-		
+
 		// record sale
 		Sale sale = new Sale(bidClientId, askClientId, amount, price, currentTime, bestBid.getId(), bestAsk.getId());
 		saleDao.persist(sale);
-		
+
 		// update metadata
 		Metadata metadata = metadataDao.findAll().get(0);
 		metadata.addToVolume(amount);
@@ -179,7 +221,7 @@ public class OrderServices {
 			metadata.setLow(price);
 		}
 		metadata.setLast(price);
-		metadataDao.merge(metadata);	
+		metadataDao.merge(metadata);
 
 		// TODO create quote
 	}
