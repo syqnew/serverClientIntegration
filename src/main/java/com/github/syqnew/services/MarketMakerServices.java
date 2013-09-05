@@ -102,8 +102,7 @@ public class MarketMakerServices {
 //
 //					bestAsk.fulfillOrder(smallerAmount);
 //					currentOrder.fulfillOrder(smallerAmount);
-//					dao.merge(bestAsk);
-//					dao.merge(currentOrder);
+//		.ntOrder);
 //
 //					Quote quote = new Quote(currentTime);
 //					if (smallerAmount > 0) {

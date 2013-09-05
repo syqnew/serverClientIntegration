@@ -50,13 +50,5 @@ AdminTimer.prototype.countdown = function(duration, placeholder, button) {
 			seconds : seconds
 		}));
 		
-		var ajax = $.ajax({
-			type : "GET",
-			url : "http://localhost:8080/marketMaker",
-			dataType : "json",
-			success : function(data) {
-				console.log(data);
-			}
-		});
 	}, 1000);
 }
