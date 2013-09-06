@@ -79,19 +79,37 @@ public class OrderServices {
 		// Limit Buy
 		case 3:
 			List<MarketOrder> bidOrders2 = orderDao.getLimitBuys();
-			List<MarketOrder> sellOrders2 = orderDao.getMarketSells();
-			matchMarketOrders(bidOrders2, sellOrders2, true);
-			List<MarketOrder> askOrders2 = orderDao.getLimitSells();
-			matchLimitOrders(bidOrders2, askOrders2, false);
+			if (bidOrders2.size() > 0) {
+				MarketOrder bestBid = bidOrders2.get(0);
+				Metadata update = metadataDao.findAll().get(0);
+				update.setBid(bestBid.getPrice());
+				update.setBidSize(bestBid.getUnfulfilled());
+				metadataDao.merge(update);
+				
+				List<MarketOrder> sellOrders2 = orderDao.getMarketSells();
+				matchMarketOrders(bidOrders2, sellOrders2, true);
+				
+				List<MarketOrder> askOrders2 = orderDao.getLimitSells();
+				matchLimitOrders(bidOrders2, askOrders2, false);
+			}
 			break;
 			
 		// Limit Sell
 		case 4:
 			List<MarketOrder> askOrders3 = orderDao.getLimitSells();
-			List<MarketOrder> buyOrders2 = orderDao.getMarketBuys();
-			matchMarketOrders(askOrders3, buyOrders2, false);
-			List<MarketOrder> bidOrders3 = orderDao.getLimitBuys();
-			matchLimitOrders(bidOrders3, askOrders3, true);
+			if (askOrders3.size() > 0) {
+				MarketOrder bestAsk = askOrders3.get(0);
+				Metadata update = metadataDao.findAll().get(0);
+				update.setAsk(bestAsk.getPrice());
+				update.setAskSize(bestAsk.getUnfulfilled());
+				metadataDao.merge(update);
+				
+				List<MarketOrder> buyOrders2 = orderDao.getMarketBuys();
+				matchMarketOrders(askOrders3, buyOrders2, false);
+				
+				List<MarketOrder> bidOrders3 = orderDao.getLimitBuys();
+				matchLimitOrders(bidOrders3, askOrders3, true);
+			}
 			break;
 		}
 	}
@@ -164,9 +182,10 @@ public class OrderServices {
 
 	protected void matchLimitOrders(List<MarketOrder> bidOrders, List<MarketOrder> askOrders, boolean sellInitiated) {
 
-		// make sure that there are both ask and bid orders
-		if (bidOrders.size() == 0 || askOrders.size() == 0)
+		// make sure that there are both ask and bid orders 
+		if (bidOrders.size() == 0 || askOrders.size() == 0) {
 			return;
+		}
 
 		MarketOrder bestBid = bidOrders.get(0);
 		MarketOrder bestAsk = askOrders.get(0);

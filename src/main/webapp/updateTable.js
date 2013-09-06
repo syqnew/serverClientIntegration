@@ -23,6 +23,7 @@ function renderTable() {
 		data : clientData,
 		dataType : "json",
 		success : function(data) {
+			console.log(data);
 			tableData["quantity"] = data[1]["shares"];
 			tableData["cashTotal"] = data[1]["cash"];
 			
