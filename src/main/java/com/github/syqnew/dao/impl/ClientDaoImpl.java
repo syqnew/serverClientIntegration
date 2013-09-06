@@ -21,6 +21,7 @@ public class ClientDaoImpl extends BaseDaoImpl<Client> implements ClientDao {
 		Query query = session.createQuery("from " + Client.class.getName() + " where email = :email");
         query.setParameter("email", email);
         Client client = (Client) query.list().get(0);
+        session.flush();
 		session.close();
 		return client;
 	}
@@ -29,6 +30,7 @@ public class ClientDaoImpl extends BaseDaoImpl<Client> implements ClientDao {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 		Client client = (Client) session.get(Client.class, id);
+		session.flush();
 		session.close();
 		return client;
 	}
