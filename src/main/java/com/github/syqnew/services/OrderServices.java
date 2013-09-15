@@ -124,12 +124,35 @@ public class OrderServices {
 		MarketOrder bestAtPrice = priceOrders.get(0);
 		MarketOrder firstAtMarket = marketOrders.get(0);
 
+		// Update the metadata
+		Metadata metadata = metadataDao.findAll().get(0);
+		
 		int price = bestAtPrice.getPrice();
+		metadata.setLast(price);
 
 		int amount = firstAtMarket.getUnfulfilled();
 		int amountAtPrice = bestAtPrice.getUnfulfilled();
-		if (amount > amountAtPrice)
+		if (amount > amountAtPrice) {
 			amount = amountAtPrice;
+			if (priceOrders.size()>1) {
+				MarketOrder nextOrder = priceOrders.get(1);
+				if (sellAtMarketPrice) {
+					metadata.setBid(nextOrder.getPrice());
+					metadata.setBidSize(nextOrder.getUnfulfilled());
+				} else {
+					metadata.setAsk(nextOrder.getPrice());
+					metadata.setAskSize(nextOrder.getUnfulfilled());
+				}
+			} else {
+				if (sellAtMarketPrice) {
+					metadata.setBid(-1);
+					metadata.setBidSize(0);
+				} else {
+					metadata.setAsk(-1);
+					metadata.setAskSize(0);
+				}
+			}
+		}
 
 		long currentTime = new Date().getTime();
 
@@ -166,7 +189,6 @@ public class OrderServices {
 		saleDao.persist(sale);
 
 		// update the metadata
-		Metadata metadata = metadataDao.findAll().get(0);
 		metadata.addToVolume(amount);
 		if (metadata.getHigh() < price) {
 			metadata.setHigh(price);
@@ -174,7 +196,6 @@ public class OrderServices {
 		if (metadata.getLow() > price) {
 			metadata.setLow(price);
 		}
-		metadata.setLast(price);
 		metadataDao.merge(metadata);
 
 		// TODO create a quote

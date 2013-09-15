@@ -67,8 +67,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 						clientId = data["id"];
 					if (marketYear == 0)
 						// make get requests to the server until
-						// Market
-						// is opened
+						// Market is opened
 						marketInterval = setInterval(checkMarketState, 500);
 				}
 			});
@@ -93,6 +92,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 					data : clientData,
 					dataType : "json",
 					success : function(data) {
+						// Check if there is a last price
 						if (data[0]["last"] != 0) {
 							if ((data[0]["last"] * order["amount"]) <= data[1]["cash"]) {
 								var ajax2 = $.ajax({
@@ -109,7 +109,6 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 							} else {
 								$('#shortSellingAlert').show();
 							}
-
 						} else {
 							var ajax2 = $.ajax({
 								type : "POST",
@@ -136,8 +135,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 				order["price"] = -1;
 				order["time"] = new Date().getTime();
 				order["unfulfilled"] = $('#size').val();
-				// status 0 -> OK, 10 ->
-				// cancelled
+				// status 0 -> OK, 10 -> cancelled
 				order["status"] = 0;
 				order["client"] = clientId;
 
