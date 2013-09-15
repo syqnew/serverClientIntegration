@@ -55,7 +55,7 @@
 					<div class="control-group">
 					  <label class="control-label"></label>
 					  <div class="controls">
-					    <button id="startButton" name="startButton" class="btn btn-info">Next</button>
+					    <button id="nextButton" name="nextButton" class="btn btn-info">Next</button>
 					  </div>
 					</div>	
 			

@@ -1,16 +1,17 @@
-define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
-		'views/marketSession', 'text!templates/admin.template', 'bootstrap' ],
-		function(App, $, _, Backbone, Handlebars, MarketSessionView,
-				AdminTemplate) {
+define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'views/marketSession',
+		'text!templates/admin.template', 'bootstrap' ], function(App, $, _, Backbone, Handlebars, MarketSessionView,
+		AdminTemplate) {
 
-			_AdminTemplate = Handlebars.compile(AdminTemplate);
+	_AdminTemplate = Handlebars.compile(AdminTemplate);
 
-			var AdminView = Backbone.View.extend({
+	var AdminView = Backbone.View
+			.extend({
 				el : $('#loginModal'),
 				render : function(username, password) {
 					$('#loginModal').html(_AdminTemplate());
 
-					$('#startButton').on("click", function(event) {
+					// Attach listener to send fields to database
+					$('#nextButton').on("click", function(event) {
 						event.preventDefault();
 						var event1 = $('#event1').val();
 						var event2 = $('#event2').val();
@@ -24,26 +25,38 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 							type : "POST",
 							url : "http://localhost:8080/admin",
 							data : JSON.stringify(data),
-							dataType : "json",
-							success : function(data) {
-							}
+							dataType : "json"
 						});
 						insertMessages(event1, event2);
+
 						var marketSessionView = new MarketSessionView();
 						marketSessionView.render(event1, event2, duration);
 					});
 
+					/*
+					 * Creates news based off of the events and inserts them
+					 * into the database. There are four variations of the news
+					 * statements.
+					 * 
+					 * @param Event in year1, and Event in year2
+					 */
 					function insertMessages(event1, event2) {
 						var stage0 = [];
 						var stage1 = [];
 						var stage2 = [];
 						var state = [];
-						if (event1.substring(0,1) == "X") state.push(0);
-						if (event1.substring(0,1) == "Y") state.push(1);
-						if (event1.substring(0,1) == "Z") state.push(2);
-						if (event2.substring(0,1) == "X") state.push(0);
-						if (event2.substring(0,1) == "Y") state.push(1);
-						if (event2.substring(0,1) == "Z")state.push(2);
+						if (event1.substring(0, 1) == "X")
+							state.push(0);
+						if (event1.substring(0, 1) == "Y")
+							state.push(1);
+						if (event1.substring(0, 1) == "Z")
+							state.push(2);
+						if (event2.substring(0, 1) == "X")
+							state.push(0);
+						if (event2.substring(0, 1) == "Y")
+							state.push(1);
+						if (event2.substring(0, 1) == "Z")
+							state.push(2);
 						var stateStr1 = [ "X", "Y", "Z" ];
 						var stateStr2 = [ "X", "Y", "Z" ];
 
@@ -54,23 +67,19 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 								if (s2 == state[1])
 									continue;
 								var temp1 = {};
-								temp1["message"] = "NOT " + stateStr1[s1]
-										+ " in Year 1 and NOT " + stateStr2[s2]
+								temp1["message"] = "NOT " + stateStr1[s1] + " in Year 1 and NOT " + stateStr2[s2]
 										+ " in Year 2";
 								stage0.push(temp1);
 								var temp2 = {};
-								temp2["message"] = stateStr1[state[0]]
-										+ " in Year 1 and NOT " + stateStr2[s2]
+								temp2["message"] = stateStr1[state[0]] + " in Year 1 and NOT " + stateStr2[s2]
 										+ " in Year 2";
 								stage1.push(temp2);
 								var temp3 = {};
-								temp3["message"] = stateStr1[state[0]]
-										+ " in Year 1 and "
-										+ stateStr2[state[1]] + " in Year 2";
+								temp3["message"] = stateStr1[state[0]] + " in Year 1 and " + stateStr2[state[1]]
+										+ " in Year 2";
 								stage2.push(temp3);
 							}
 						}
-						
 
 						var ajax = $.ajax({
 							type : "POST",
@@ -81,6 +90,5 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 					}
 				}
 			});
-			return AdminView;
-
-		});
+	return AdminView;
+});
