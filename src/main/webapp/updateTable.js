@@ -9,6 +9,9 @@ function updateTable(client, period) {
 	timerId = setInterval(renderTable, timeInterval);
 }
 
+/* 
+ * Populate quote/portfolio table of ui using metadata.
+ */
 function renderTable() {
 	if (timeLeft > 0) timeLeft -= timeInterval;
 	else clearInterval(timerId);

@@ -1,6 +1,9 @@
 var timerId, timerStage2Id, timeLeft, timeStage2Left, placeholder, button, temp, durationOriginal;
 var year = 1;
 
+/*
+ * Renders timer for the trader, not linked to timers of other classes/methods.
+ */
 function TraderTimer() {
 }
 TraderTimer.prototype.countdown = function(duration, placeholder) {
@@ -26,6 +29,10 @@ TraderTimer.prototype.countdown = function(duration, placeholder) {
 	}, 1000);
 }
 
+/*
+ * Render timer for the admin, not linked to timers of other classes/methods.
+ * After year 1 is over, the year2 button appears.
+ */
 function AdminTimer() {
 }
 AdminTimer.prototype.countdown = function(duration, placeholder, button) {

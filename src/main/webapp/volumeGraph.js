@@ -7,6 +7,9 @@ function makeVolumeGraph(duration) {
 	graphInterval = setInterval(renderVolumeGraph, 1000);
 }
 
+/* 
+ * Rendering volume graph from sale data. 
+ */
 function renderVolumeGraph() {
 	if (graphInterval > 0) {
 		timeLeft -= 1000;

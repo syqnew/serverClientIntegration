@@ -1,7 +1,5 @@
 <html>
 <body>
-
-	<!-- Put all references to external libraries here -->
 	<script
 		src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.8/require.min.js"></script>
 	<!-- CSS for Bootstrap -->
@@ -60,7 +58,7 @@
 		</div>
 	</div>
 
-	<!-- My stuff. HAS TO GO LAST -->
+	<!-- Redirecting to routing mechanism -->
 	<script type="text/javascript" src="app.js"></script>
 </body>
 </html>

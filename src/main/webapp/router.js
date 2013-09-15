@@ -15,10 +15,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 			type : "POST",
 			url : "http://localhost:8080/client",
 			data : JSON.stringify(data),
-			dataType : "json",
-			success : function(data) {
-				console.log("success");
-			}
+			dataType : "json"
 		});
 		var studentView = new StudentView();
 		studentView.render(email);

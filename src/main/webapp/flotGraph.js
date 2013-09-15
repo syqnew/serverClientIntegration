@@ -7,16 +7,17 @@ function priceGraph(place, duration) {
 	min = new Date().getTime();
 	timeLeft = duration * 60 * 1000;
 	priceGraphInterval = setInterval(renderPriceGraph, 1000);
-
 }
 
+/* 
+ * Render the stock price graph in the ui. Contains a triangle for the 'best' bid order, and 
+ * one for the 'best' ask order. 
+ */
 function renderPriceGraph() {
 	if (timeLeft > 0)
 		timeLeft -= 1000;
 	else
 		clearInterval(priceGraphInterval);
-
-	console.log("past the if else");
 
 	bid = [];
 	ask = [];
