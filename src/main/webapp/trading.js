@@ -11,6 +11,9 @@ Trading.prototype.startTrading = function() {
 	this.timerId = setInterval(this.checkForUpdates, 1000);
 };
 
+/*
+ * Get market orders for a specific client and populate their open orders container in the ui
+ */
 Trading.prototype.checkForUpdates = function() {
 	if (this.timeLeft > 0)
 		this.timeLeft -= 1000;
@@ -39,7 +42,6 @@ Trading.prototype.checkForUpdates = function() {
 				dataType : "json",
 				success : function(data) {
 					if (data) {
-						console.log(data);
 
 						var ordersList = [];
 						for ( var ct = 0; ct < data.length; ct++) {

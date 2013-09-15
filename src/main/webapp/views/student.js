@@ -2,8 +2,8 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 		'text!templates/timer.template', 'text!templates/openOrders.template', 'text!templates/news.template',
 		'text!templates/quotePortfolioTable.template', 'text!templates/cancelOrder.template',
 		'text!templates/transactions.template', '../news', '../updateTable', '../volumeGraph', '../flotGraph',
-		'../trading', '../transactions', 'flot', 'flotTime', 'flotSymbol', 'bootstrap' ], function(App, $, _, Backbone, Handlebars,
-		studentTemplate, timerTemplate, openOrdersTemplate, newsTemplate, quotePortfolioTableTemplate,
+		'../trading', '../transactions', 'flot', 'flotTime', 'flotSymbol', 'bootstrap' ], function(App, $, _, Backbone,
+		Handlebars, studentTemplate, timerTemplate, openOrdersTemplate, newsTemplate, quotePortfolioTableTemplate,
 		cancelOrderTemplate, transactionsTemplate) {
 
 	_studentTemplate = Handlebars.compile(studentTemplate);
@@ -24,13 +24,9 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 	var StudentView = Backbone.View.extend({
 		el : $('#loginModal'),
 		render : function(email) {
-			// testin
-
 			initialTemplate["email"] = email;
 			$('#loginModal').html(_studentTemplate(initialTemplate));
 			$('#shortSellingAlert').hide();
-			// $('#priceGraph').html(_priceGraphTemplate());
-			// $('#volumeGraph').html(_volumeGraphTemplate());
 			$('#marketNews').html(_newsTemplate({
 				"news" : [ {
 					"new" : "Market is closed"
@@ -62,12 +58,11 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 				data : clientData,
 				dataType : "json",
 				success : function(data) {
-					console.log(data);
 					if (data)
 						clientId = data["id"];
 					if (marketYear == 0)
-						// make get requests to the server until
-						// Market is opened
+						// make get requests to the server until market is
+						// opened
 						marketInterval = setInterval(checkMarketState, 500);
 				}
 			});
@@ -80,8 +75,6 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 				order["price"] = -1;
 				order["time"] = new Date().getTime();
 				order["unfulfilled"] = $('#size').val();
-				// status 0 -> OK, 10 ->
-				// cancelled
 				order["status"] = 0;
 				order["client"] = clientId;
 
@@ -99,10 +92,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 									type : "POST",
 									url : "http://localhost:8080/order",
 									data : JSON.stringify(order),
-									dataType : "json",
-									success : function(data) {
-										console.log("success");
-									}
+									dataType : "json"
 								});
 								$('#size').val("");
 								$('#price').val("");
@@ -114,10 +104,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 								type : "POST",
 								url : "http://localhost:8080/order",
 								data : JSON.stringify(order),
-								dataType : "json",
-								success : function(data) {
-									console.log("success");
-								}
+								dataType : "json"
 							});
 							$('#size').val("");
 							$('#price').val("");
@@ -135,7 +122,6 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 				order["price"] = -1;
 				order["time"] = new Date().getTime();
 				order["unfulfilled"] = $('#size').val();
-				// status 0 -> OK, 10 -> cancelled
 				order["status"] = 0;
 				order["client"] = clientId;
 
@@ -160,10 +146,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 											type : "POST",
 											url : "http://localhost:8080/order",
 											data : JSON.stringify(order),
-											dataType : "json",
-											success : function(data) {
-												console.log("success");
-											}
+											dataType : "json"
 										});
 									}
 								}
@@ -184,8 +167,6 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 				order["price"] = $('#price').val();
 				order["time"] = new Date().getTime();
 				order["unfulfilled"] = $('#size').val();
-				// status 0 -> OK, 10 ->
-				// cancelled
 				order["status"] = 0;
 				order["client"] = clientId;
 
@@ -201,10 +182,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 								type : "POST",
 								url : "http://localhost:8080/order",
 								data : JSON.stringify(order),
-								dataType : "json",
-								success : function(data) {
-									console.log("success");
-								}
+								dataType : "json"
 							});
 							$('#size').val("");
 							$('#price').val("");
@@ -224,10 +202,9 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 				order["price"] = $('#price').val();
 				order["time"] = new Date().getTime();
 				order["unfulfilled"] = $('#size').val();
-				// status 0 -> OK, 10 ->
-				// cancelled
 				order["status"] = 0;
 				order["client"] = clientId;
+
 				var clientData = "email=" + email;
 				var ajax = $.ajax({
 					type : "GET",
@@ -242,10 +219,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 								type : "POST",
 								url : "http://localhost:8080/order",
 								data : JSON.stringify(order),
-								dataType : "json",
-								success : function(data) {
-									console.log("success");
-								}
+								dataType : "json"
 							});
 
 						} else {
@@ -256,15 +230,18 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 
 			});
 
+			// TODO / FIXME
 			$('#cancelOrderBtn').on('click', function(event) {
 				event.preventDefault();
 				var selected = $('#openOrdersCancel').children(':selected');
 				console.log(selected);
 			});
-
 		}
 	});
 
+	/*
+	 * Checks to see if the Market has opened
+	 */
 	function checkMarketState() {
 		var ajax = $.ajax({
 			type : "GET",
@@ -280,26 +257,47 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!template
 					$('button').prop('disabled', false);
 					marketYear = data["year"];
 					updateTable(clientId, data["duration"]);
+
+					// Get Year 1 News
 					news = new News(data["duration"], clientId);
 					news.getStage1News();
+
+					// Start the timer for the session
 					var timer = new TraderTimer();
 					timer.countdown(data["duration"], '#studentTimer');
+
+					// Show trading orders
 					var trading = new Trading(data["duration"], clientId);
 					trading.startTrading();
+
+					// Show the graphs of stock price and volume
 					priceGraph(data["duration"]);
 					makeVolumeGraph(data["duration"]);
+
+					// Show transactions made
 					transaction = new Transaction(clientId, data["duration"]);
 					transaction.getTransactions();
 				} else if (data["year"] == 2 && marketYear == 1) {
+					// clear the timer that checks the state of the market
 					clearInterval(marketInterval);
 					marketYear = data["year"];
+
+					// get Year 2 News
 					news.getStage2News();
+
+					// Start timer for year 2
 					var timer = new TraderTimer();
 					timer.countdown(data["duration"], '#studentTimer');
+
+					// Show the trading orders
 					var trading = new Trading(data["duration"], clientId);
 					trading.startTrading();
+
+					// Reveal the graphs
 					priceGraph(data["duration"]);
 					makeVolumeGraph(data["duration"]);
+
+					// Update transactions
 					transaction.getTransactions(clientId, data["duration"]);
 				}
 			}

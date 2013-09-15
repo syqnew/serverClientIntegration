@@ -12,6 +12,9 @@ Transaction.prototype.getTransactions = function() {
 	this.timerId = setInterval(this.renderTransactions, 1000);
 }
 
+/*
+ * Populate the transaction section of the ui
+ */
 Transaction.prototype.renderTransactions = function() {
 	if (this.timeLeft > 0) this.timeLeft -= 1000;
 	else clearInterval(this.timerId);
