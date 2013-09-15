@@ -1,7 +1,6 @@
-define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
-		'text!templates/marketSession.template',
-		'text!templates/timer.template', '../timer', 'bootstrap' ], function(
-		App, $, _, Backbone, Handlebars, MarketSessionTemplate, TimerTemplate) {
+define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars', 'text!templates/marketSession.template',
+		'text!templates/timer.template', '../timer', 'bootstrap' ], function(App, $, _, Backbone, Handlebars,
+		MarketSessionTemplate, TimerTemplate) {
 
 	_MarketSessionTemplate = Handlebars.compile(MarketSessionTemplate);
 	_TimerTemplate = Handlebars.compile(TimerTemplate);
@@ -20,6 +19,8 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 				minutes : duration,
 				seconds : "00"
 			}));
+
+			// Signals to server to start either session 1 or 2
 			$('#startPeriodButton').on("click", function(event) {
 				event.preventDefault();
 				$('#startPeriodButton').button('loading');
@@ -36,7 +37,7 @@ define([ 'app', 'jquery', 'underscore', 'backbone', 'Handlebars',
 					success : function(data) {
 					}
 				});
-				
+
 				var timer = new AdminTimer();
 				timer.countdown(duration, '#timer', '#startPeriodButton');
 			});
