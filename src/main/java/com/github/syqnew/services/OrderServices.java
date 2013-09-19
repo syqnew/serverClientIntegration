@@ -132,7 +132,7 @@ public class OrderServices {
 
 		int amount = firstAtMarket.getUnfulfilled();
 		int amountAtPrice = bestAtPrice.getUnfulfilled();
-		if (amount > amountAtPrice) {
+		if (amount >= amountAtPrice) {
 			amount = amountAtPrice;
 			if (priceOrders.size()>1) {
 				MarketOrder nextOrder = priceOrders.get(1);
