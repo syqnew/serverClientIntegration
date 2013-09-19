@@ -188,7 +188,6 @@ public class OrderServices {
 		}
 		saleDao.persist(sale);
 
-		// update the metadata
 		metadata.addToVolume(amount);
 		if (metadata.getHigh() < price) {
 			metadata.setHigh(price);
@@ -211,6 +210,9 @@ public class OrderServices {
 		MarketOrder bestBid = bidOrders.get(0);
 		MarketOrder bestAsk = askOrders.get(0);
 
+		// Update the metadata
+		Metadata metadata = metadataDao.findAll().get(0);
+
 		int bidPrice = bestBid.getPrice();
 		int askPrice = bestAsk.getPrice();
 
@@ -223,11 +225,55 @@ public class OrderServices {
 		} else {
 			price = askPrice;
 		}
+		metadata.setLast(price);
 
 		int amount = bestBid.getUnfulfilled();
 		int amountAsk = bestAsk.getUnfulfilled();
-		if (amount > amountAsk)
+		if (amount > amountAsk){
+			// more market buys
+			metadata.setBid(price);
+			metadata.setBidSize(amount- amountAsk);
+			if (askOrders.size()>1) {
+				MarketOrder nextAsk = askOrders.get(1);
+				metadata.setAsk(nextAsk.getPrice());
+				metadata.setAskSize(nextAsk.getUnfulfilled());
+			} else {
+				metadata.setAsk(-1);
+				metadata.setAskSize(0);
+			}
 			amount = amountAsk;
+		} else {
+			if (amount < amountAsk) {
+				// more market sells
+				metadata.setAsk(price);
+				metadata.setAskSize(amountAsk - amount);
+				if (bidOrders.size() > 1) {
+					MarketOrder nextBid = bidOrders.get(1);
+					metadata.setBid(nextBid.getPrice());
+					metadata.setBidSize(nextBid.getUnfulfilled());
+				} else {
+					metadata.setBid(-1);
+					metadata.setBidSize(0);
+				}
+			} else {
+				if (bidOrders.size() > 1) {
+					MarketOrder nextBid = bidOrders.get(1);
+					metadata.setBid(nextBid.getPrice());
+					metadata.setBidSize(nextBid.getUnfulfilled());
+				} else {
+					metadata.setBid(-1);
+					metadata.setBidSize(0);
+				}
+				if (askOrders.size()>1) {
+					MarketOrder nextAsk = askOrders.get(1);
+					metadata.setAsk(nextAsk.getPrice());
+					metadata.setAskSize(nextAsk.getUnfulfilled());
+				} else {
+					metadata.setAsk(-1);
+					metadata.setAskSize(0);
+				}
+			}
+		}
 
 		long currentTime = new Date().getTime();
 
@@ -252,7 +298,6 @@ public class OrderServices {
 		saleDao.persist(sale);
 
 		// update metadata
-		Metadata metadata = metadataDao.findAll().get(0);
 		metadata.addToVolume(amount);
 		if (metadata.getHigh() < price) {
 			metadata.setHigh(price);
@@ -260,7 +305,6 @@ public class OrderServices {
 		if (metadata.getLow() > price) {
 			metadata.setLow(price);
 		}
-		metadata.setLast(price);
 		metadataDao.merge(metadata);
 
 		// TODO create quote
