@@ -9,13 +9,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.github.syqnew.services.AdminServices;
 
-
+/**
+ * Servlet that handles get and post requests to /admin/*
+ * 
+ * @author snew
+ *
+ */
 public class AdminServlet extends HttpServlet {
 	
 	private AdminServices adminServices = new AdminServices();
 	
-	// for students  
-	// In mySQL: set global transaction isolation level read committed
+	/**
+	 * Get request that is used by students
+	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
@@ -23,7 +29,9 @@ public class AdminServlet extends HttpServlet {
 		adminServices.getCurrentYear(request, response);
 	}
 
-	// For admins
+	/** 
+	 * Post request that is used by the admin
+	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");

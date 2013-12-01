@@ -9,10 +9,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.github.syqnew.services.MetadataServices;
 
+/**
+ * Servlet that handles get and post requests to /metadata/*
+ * 
+ * @author snew
+ *
+ */
 public class MetadataServlet extends HttpServlet {
 	
-	MetadataServices metadataServices = new MetadataServices();
+	private MetadataServices metadataServices = new MetadataServices();
 
+	/**
+	 * Get request that is used by students
+	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");

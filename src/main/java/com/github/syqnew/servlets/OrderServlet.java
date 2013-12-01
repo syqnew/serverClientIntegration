@@ -7,20 +7,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.codehaus.jackson.map.ObjectMapper;
-
-import com.github.syqnew.dao.MarketOrderDao;
-import com.github.syqnew.dao.MarketStateDao;
-import com.github.syqnew.dao.impl.MarketOrderDaoImpl;
-import com.github.syqnew.dao.impl.MarketStateDaoImpl;
-import com.github.syqnew.domain.MarketOrder;
-import com.github.syqnew.domain.MarketState;
 import com.github.syqnew.services.OrderServices;
 
+/**
+ * Servlet that handles get and post requests to /order/*
+ * 
+ * @author snew
+ *
+ */
 public class OrderServlet extends HttpServlet {
 
-	OrderServices orderServices = new OrderServices();
+	private OrderServices orderServices = new OrderServices();
 
+	/**
+	 * Get request that is used by the students
+	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
@@ -29,6 +30,9 @@ public class OrderServlet extends HttpServlet {
 				response);
 	}
 
+	/**
+	 * Post request that is used by the students
+	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");

@@ -9,11 +9,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.github.syqnew.services.ClientServices;
 
+/**
+ * Servlet that handles get and post requests to /client/*
+ * 
+ * @author snew
+ *
+ */
 public class ClientServlet extends HttpServlet {
 
-	ClientServices clientServices = new ClientServices();
+	private ClientServices clientServices = new ClientServices();
 
-	// curl localhost:8080/client/?email=pandas
+	/**
+	 * Get request that is used by students
+	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setStatus(HttpServletResponse.SC_OK);
@@ -21,6 +29,9 @@ public class ClientServlet extends HttpServlet {
 		clientServices.getClient(request, response);
 	}
 
+	/**
+	 * Post request that is used by students
+	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");

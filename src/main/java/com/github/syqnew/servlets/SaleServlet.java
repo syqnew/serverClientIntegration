@@ -9,10 +9,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.github.syqnew.services.SaleServices;
 
+/**
+ * Servlet that handles get and post requests to /sale/*
+ * 
+ * @author snew
+ *
+ */
 public class SaleServlet extends HttpServlet {
 	
-	SaleServices saleServices = new SaleServices();
+	private SaleServices saleServices = new SaleServices();
 	
+	/**
+	 * Get request that is used by students
+	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
@@ -20,6 +29,9 @@ public class SaleServlet extends HttpServlet {
 		saleServices.getSales(request, response);
 	}
 
+	/**
+	 * Get request that is used by students
+	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
