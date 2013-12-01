@@ -3,9 +3,15 @@ package com.github.syqnew.domain;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
+/**
+ * The MarketState class represents the MarketState table in the database. 
+ * Annotations are for Hibernate's ORM.
+ * 
+ * The MarketState keeps track of what type of year1 and year2 are and 
+ * how long each year is. 
+ * 
+ * @author snew
+ */
 @Entity
 public class MarketState implements BaseObject {
 
@@ -15,9 +21,19 @@ public class MarketState implements BaseObject {
 	private String year2Event;
 	private int duration;
 
+	/**
+	 * Empty constructor for Hibernate and Jackson
+	 */
 	public MarketState() {
 	}
 
+	/**
+	 * Creates a MarketState Object
+	 * @param year; must be either 0, 1, or 2
+	 * @param year1Event; must be nonempty
+	 * @param year2Event; must be nonempty
+	 * @param duration; must be positive
+	 */
 	public MarketState(int year, String year1Event, String year2Event, int duration) {
 		this.year = year;
 		this.year1Event = year1Event;

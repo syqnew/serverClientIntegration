@@ -2,13 +2,23 @@ package com.github.syqnew.domain;
 
 import javax.persistence.Entity;
 
-/**
- * This table actually contains both market and limit orders. However, order is a reserved word in mySQL.
- */
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Version;
 
+/**
+ * The MarketOrder class represents the MarketOrder table in the database. 
+ * Annotations are for Hibernate's ORM.
+ * 
+ * A MarketOrder object represents a market or limit order. The table 
+ * represents the order book. 
+ * 
+ * This table actually contains both market and limit orders. 
+ * However, order is a reserved word in mySQL.
+ * 
+ * @author snew
+ *
+ */
 @Entity
 public class MarketOrder implements BaseObject {
 
@@ -25,9 +35,22 @@ public class MarketOrder implements BaseObject {
 	@Version
 	private int version;
 
+	/**
+	 * Empty constructor for Hibernate and Jackson
+	 */
 	public MarketOrder() {
 	}
 
+	/**
+	 * Creates a MarketOrder Object
+	 * @param orderType; must be 1, 2, 3, or 4
+	 * @param status; must be 0, 5, or 10
+	 * @param client
+	 * @param amount; must be positive
+	 * @param price; must be positive
+	 * @param unfulfilled; must be <= amount
+	 * @param time; must be positive
+	 */
 	public MarketOrder(int orderType, int status, int client, int amount,
 			int price, int unfulfilled, long time) {
 		this.orderType = orderType;
@@ -111,13 +134,22 @@ public class MarketOrder implements BaseObject {
 		this.version = version;
 	}
 	
+	/**
+	 * Fulfill an order
+	 * 
+	 * @param size; must be greater than zero
+	 */
 	public void fulfillOrder(int size) {
+		assert size > 0;
 		this.unfulfilled -= size;
 		if (this.unfulfilled == 0) {
 			this.status = 5;
 		}
 	}
 
+	/**
+	 * Cancel the order
+	 */
 	public void cancelOrder() {
 		this.status = 10;
 	}

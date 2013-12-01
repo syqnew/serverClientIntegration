@@ -4,6 +4,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * The Quote class represents the Quote table in the database. 
+ * Annotations are for Hibernate's ORM.
+ * 
+ * A quote object represents a bid or ask quote.
+ * 
+ * @author snew
+ */
 @Entity
 public class Quote implements BaseObject {
 
@@ -16,9 +24,16 @@ public class Quote implements BaseObject {
 	private int askSize;
 	private long time;
 
+	/** 
+	 * Empty constructor for Hibernate and Jackson
+	 */
 	public Quote() {
 	}
 
+	/**
+	 * Creates a Quote object
+	 * @param time; must be positive
+	 */
 	public Quote(long time) {
 		super();
 		this.time = time;

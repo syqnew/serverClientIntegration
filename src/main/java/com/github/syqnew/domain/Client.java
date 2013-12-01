@@ -4,6 +4,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * The Client class represents the Client table in the database. 
+ * Annotations are for Hibernate's ORM.
+ * 
+ * Each user has a client associated with them. The client object/row
+ * keeps track of the number of shares and amount of cash a user has. 
+ * 
+ * @author snew
+ */
 @Entity
 public class Client implements BaseObject {
 
@@ -14,10 +23,17 @@ public class Client implements BaseObject {
 	private int cash = 10000;
 	private int shares = 400;
 
+	/**
+	 * Empty constructor for Hibernate and Jackson
+	 */
 	public Client() {
 	}
 
-	// Each client starts out with $10,000 and 400 shares
+	/**
+	 * Creates a client object
+	 * 
+	 * @param String email; must be nonempty
+	 */
 	public Client(String email) {
 		this.email = email;
 	}
@@ -54,12 +70,28 @@ public class Client implements BaseObject {
 		this.shares = shares;
 	}
 
+	/**
+	 * Client buys a certain number of shares at a certain price
+	 * 
+	 * @param shares; must be positive
+	 * @param totalPrice; must be nonnegative
+	 */
 	public void buyShares(int shares, int totalPrice) {
+		assert shares > 0;
+		assert totalPrice >= 0;
 		this.shares += shares;
 		this.cash -= totalPrice;
 	}
 
+	/**
+	 * Client sells a certain number of shares at a certain price
+	 * 
+	 * @param shares; must be positive
+	 * @param totalPrice; must be nonnegative
+	 */
 	public void sellShares(int shares, int totalPrice) {
+		assert shares > 0;
+		assert totalPrice >= 0;
 		this.shares -= shares;
 		this.cash += totalPrice;
 	}

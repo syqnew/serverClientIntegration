@@ -4,6 +4,19 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Version;
 
+/**
+ * The Metadata class represents the Metadata table in the database. 
+ * Annotations are for Hibernate's ORM.
+ * 
+ * This table is used primarily for quick access to Market Stats, like
+ * current ask, bid, last selling price, etc. 
+ * 
+ * Only one row is in this table at one time and the row is automatically 
+ * inserted when the table is created, so there is no need for a nonempty
+ * constructor.
+ * 
+ * @author snew
+ */
 @Entity
 public class Metadata implements BaseObject {
 
@@ -20,6 +33,9 @@ public class Metadata implements BaseObject {
 	@Version
 	private int version;
 
+	/**
+	 * Empty constructor for Hibernate and Jackson
+	 */
 	public Metadata() {
 	}
 
@@ -95,7 +111,12 @@ public class Metadata implements BaseObject {
 		this.version = version;
 	}
 	
+	/**
+	 * Add stocks to the total volume
+	 * @param size; must be greater than zero
+	 */
 	public void addToVolume(int size) {
+		assert size > 0;
 		this.volume += size;
 	}
 

@@ -4,6 +4,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * The Sale class represents the Sale table in the database. 
+ * Annotations are for Hibernate's ORM.
+ * 
+ * A Sale object records a transaction that happens between 
+ * two clients.
+ * 
+ * @author snew
+ */
 @Entity
 public class Sale implements BaseObject {
 
@@ -18,9 +27,22 @@ public class Sale implements BaseObject {
 	private int buyOrderId;
 	private int sellOrderId;
 
+	/**
+	 * Empty constructor for Hibernate and Jackson
+	 */
 	public Sale() {
 	}
 
+	/**
+	 * Creates a Sale Object
+	 * @param buyerId
+	 * @param sellerId
+	 * @param amount; must be positive
+	 * @param price; must be positive
+	 * @param time; must be positive
+	 * @param buyOrderId
+	 * @param sellOrderId
+	 */
 	public Sale(int buyerId, int sellerId, int amount, int price, long time,
 			int buyOrderId, int sellOrderId) {
 		this.buyerId = buyerId;
