@@ -11,19 +11,23 @@ import com.github.syqnew.dao.MarketOrderDao;
 import com.github.syqnew.domain.MarketOrder;
 
 /**
+ * Implementation of the MarketOrderDao interface
  * 
- * @author snew Note that this class encompasses not only Market Orders but also
- *         Limit Orders. It is named like this because Order is a reserved key
- *         word in mySQL, and with Hibernate the name of the database object
- *         must match the name of the table in mySQL
+ * @author snew 
  */
 public class MarketOrderDaoImpl extends BaseDaoImpl<MarketOrder> implements
 		MarketOrderDao {
 
+	/**
+	 * Creates a MarketOrderImpl Object
+	 */
 	public MarketOrderDaoImpl() {
 		super(MarketOrder.class);
 	}
 
+	/**
+	 * See spec in the interface MarketOrderDao 
+	 */
 	public List<MarketOrder> getByClient(int client) {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
@@ -37,6 +41,9 @@ public class MarketOrderDaoImpl extends BaseDaoImpl<MarketOrder> implements
 		return orders;
 	}
 
+	/**
+	 * See spec in the interface MarketOrderDao 
+	 */
 	public List<MarketOrder> getLimitBuys() {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
@@ -49,6 +56,9 @@ public class MarketOrderDaoImpl extends BaseDaoImpl<MarketOrder> implements
 		return orders;
 	}
 
+	/**
+	 * See spec in the interface MarketOrderDao 
+	 */
 	public List<MarketOrder> getLimitSells() {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
@@ -61,6 +71,9 @@ public class MarketOrderDaoImpl extends BaseDaoImpl<MarketOrder> implements
 		return orders;
 	}
 
+	/**
+	 * See spec in the interface MarketOrderDao 
+	 */
 	public List<MarketOrder> getMarketBuys() {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
@@ -75,6 +88,9 @@ public class MarketOrderDaoImpl extends BaseDaoImpl<MarketOrder> implements
 		return orders;
 	}
 
+	/**
+	 * See spec in the interface MarketOrderDao 
+	 */
 	public List<MarketOrder> getMarketSells() {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();

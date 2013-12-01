@@ -8,12 +8,23 @@ import com.github.syqnew.HibernateUtil;
 import com.github.syqnew.dao.ClientDao;
 import com.github.syqnew.domain.Client;
 
+/**
+ * Implementation of the ClientDao interface
+ * @author snew
+ *
+ */
 public class ClientDaoImpl extends BaseDaoImpl<Client> implements ClientDao {
 	
+	/**
+	 * Creates a ClientDao object
+	 */
 	public ClientDaoImpl() {
 		super(Client.class);
 	}
 
+	/**
+	 * See spec in the interface ClientDao
+	 */
 	public Client findByEmail(String email) {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
@@ -26,6 +37,9 @@ public class ClientDaoImpl extends BaseDaoImpl<Client> implements ClientDao {
 		return client;
 	}
 
+	/**
+	 * See spec in the interface ClientDao
+	 */
 	public Client findById(int id) {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();

@@ -12,12 +12,24 @@ import com.github.syqnew.domain.MarketOrder;
 import com.github.syqnew.domain.Quote;
 import com.github.syqnew.domain.Sale;
 
+/**
+ * Implementation of the interface SaleDao
+ * 
+ * @author snew
+ *
+ */
 public class SaleDaoImpl extends BaseDaoImpl<Sale> implements SaleDao {
 
+	/**
+	 * Creates a SaleDaoImpl object
+	 */
 	public SaleDaoImpl() {
 		super(Sale.class);
 	}
 
+	/**
+	 * See spec in the interface SaleDao
+	 */
 	public List<Sale> findByClient(int id) {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();

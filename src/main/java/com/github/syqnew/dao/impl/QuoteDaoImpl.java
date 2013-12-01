@@ -8,12 +8,24 @@ import com.github.syqnew.HibernateUtil;
 import com.github.syqnew.dao.QuoteDao;
 import com.github.syqnew.domain.Quote;
 
+/**
+ * Implementation of the interface QuoteDao
+ * 
+ * @author snew
+ *
+ */
 public class QuoteDaoImpl extends BaseDaoImpl<Quote> implements QuoteDao {
 
+	/**
+	 * Creates a QuoteDaoImpl object
+	 */
 	public QuoteDaoImpl() {
 		super(Quote.class);
 	}
 
+	/**
+	 * See spec in the interface QuoteDao
+	 */
 	public Quote getLastQuote() {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();

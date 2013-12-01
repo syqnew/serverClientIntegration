@@ -8,13 +8,26 @@ import org.hibernate.SessionFactory;
 import com.github.syqnew.HibernateUtil;
 import com.github.syqnew.dao.BaseDao;
 
+/**
+ * Implementation of the BaseDao interface
+ * @author snew
+ *
+ * @param <T>
+ */
 public class BaseDaoImpl<T> implements BaseDao<T> {
 	private Class<T> type;
 
+	/**
+	 * Creates a BaseDaoImpl Object
+	 * @param type
+	 */
 	public BaseDaoImpl(Class<T> type) {
 		this.type = type;
 	}
 
+	/**
+	 * See spec in the interface BaseDao
+	 */
 	@SuppressWarnings("unchecked")
 	public List<T> findAll() {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
@@ -25,6 +38,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return objects;
 	}
 
+	/**
+	 * See spec in the interface BaseDao
+	 */
 	public void persist(T BaseObject) {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
@@ -35,6 +51,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		session.close();
 	}
 
+	/**
+	 * See spec in the interface BaseDao
+	 */
 	public void merge(T BaseObject) {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
@@ -45,6 +64,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		session.close();
 	}
 
+	/**
+	 * See spec in the interface BaseDao
+	 */
 	public void remove(T BaseObject) {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
@@ -55,6 +77,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		session.close();
 	}
 
+	/**
+	 * See spec in the interface BaseDao
+	 */
 	public int count() {
 		return findAll().size();
 	}

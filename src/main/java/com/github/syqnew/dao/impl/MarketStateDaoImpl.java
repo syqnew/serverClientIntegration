@@ -13,12 +13,23 @@ import com.github.syqnew.HibernateUtil;
 import com.github.syqnew.dao.MarketStateDao;
 import com.github.syqnew.domain.MarketState;
 
+/**
+ * Implementation of the MarketStateDao interface
+ * @author snew
+ *
+ */
 public class MarketStateDaoImpl extends BaseDaoImpl<MarketState> implements MarketStateDao {
 	
+	/**
+	 * Creates a MarketStateDaoImpl Object
+	 */
 	public MarketStateDaoImpl() {
 		super(MarketState.class);
 	}
 
+	/**
+	 * See spec in the interface MarketStateDao
+	 */
 	public MarketState getCurrentMarketState() {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
