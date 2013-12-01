@@ -26,13 +26,24 @@ import com.github.syqnew.domain.MarketOrder;
 import com.github.syqnew.domain.Metadata;
 import com.github.syqnew.domain.Sale;
 
+/**
+ * Operations:
+ * - GET orders given a client
+ * - POST an order
+ * 
+ * @author snew
+ *
+ */
 public class OrderServices {
 
-	MarketOrderDao orderDao;
-	ClientDao clientDao;
-	SaleDao saleDao;
-	MetadataDao metadataDao;
+	private MarketOrderDao orderDao;
+	private ClientDao clientDao;
+	private SaleDao saleDao;
+	private MetadataDao metadataDao;
 
+	/**
+	 * Creates an OrderServices object
+	 */
 	public OrderServices() {
 		orderDao = new MarketOrderDaoImpl();
 		clientDao = new ClientDaoImpl();
@@ -40,6 +51,16 @@ public class OrderServices {
 		metadataDao = new MetadataDaoImpl();
 	}
 
+	/**
+	 * Get all the orders associated with a client
+	 * 
+	 * @param clientId
+	 * @param request
+	 * @param response
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
 	public void getMyOrders(String clientId, HttpServletRequest request,
 			HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -52,6 +73,13 @@ public class OrderServices {
 		response.getWriter().println(list);
 	}
 
+	/**
+	 * Insert an order into the database
+	 * @param request
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
 	public void submitOrder(HttpServletRequest request)
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -114,7 +142,14 @@ public class OrderServices {
 		}
 	}
 
-	protected void matchMarketOrders(List<MarketOrder> priceOrders, List<MarketOrder> marketOrders,
+	/**
+	 * See if any of the market orders can be satisfied
+	 * 
+	 * @param priceOrders
+	 * @param marketOrders
+	 * @param sellAtMarketPrice
+	 */
+	private void matchMarketOrders(List<MarketOrder> priceOrders, List<MarketOrder> marketOrders,
 			boolean sellAtMarketPrice) {
 		// Cannot handle order if one of the lists is empty
 		if (priceOrders.size() == 0 || marketOrders.size() == 0)
@@ -200,7 +235,14 @@ public class OrderServices {
 		// TODO create a quote
 	}
 
-	protected void matchLimitOrders(List<MarketOrder> bidOrders, List<MarketOrder> askOrders, boolean sellInitiated) {
+	/**
+	 * See if any of the limit orders match each other
+	 * 
+	 * @param bidOrders
+	 * @param askOrders
+	 * @param sellInitiated
+	 */
+	private void matchLimitOrders(List<MarketOrder> bidOrders, List<MarketOrder> askOrders, boolean sellInitiated) {
 
 		// make sure that there are both ask and bid orders 
 		if (bidOrders.size() == 0 || askOrders.size() == 0) {

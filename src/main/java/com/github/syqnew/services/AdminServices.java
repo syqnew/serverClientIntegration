@@ -14,14 +14,34 @@ import com.github.syqnew.dao.MarketStateDao;
 import com.github.syqnew.dao.impl.MarketStateDaoImpl;
 import com.github.syqnew.domain.MarketState;
 
+/**
+ * Operations:
+ * - GET current market year/state
+ * - POST market year/state 
+ * 
+ * @author snew
+ *
+ */
 public class AdminServices {
 	
-	MarketStateDao dao;
+	private MarketStateDao dao;
 
+	/**
+	 * Creates an AdminServices object
+	 */
 	public AdminServices() {
 		dao = new MarketStateDaoImpl();
 	}
 
+	/**
+	 * Get the current year/state of the market from the database
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
 	public void getCurrentYear(HttpServletRequest request,
 			HttpServletResponse response) throws JsonGenerationException,
 			JsonMappingException, IOException {
@@ -31,6 +51,14 @@ public class AdminServices {
 				mapper.writeValueAsString(currentMarketState));
 	}
 
+	/**
+	 * Insert a market state to the database
+	 * 
+	 * @param request
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
 	public void updateMarketState(HttpServletRequest request)
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();

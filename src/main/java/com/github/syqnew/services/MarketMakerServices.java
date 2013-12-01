@@ -19,6 +19,16 @@ import com.github.syqnew.domain.Metadata;
 import com.github.syqnew.domain.Quote;
 import com.github.syqnew.domain.Sale;
 
+/**
+ * This Service Object is no longer used because we have transitioned
+ * to a model where the orders are handled when a new order has been 
+ * put in. 
+ * 
+ * This class is merely here for reference for the OrdersServices.
+ * 
+ * @author snew
+ *
+ */
 public class MarketMakerServices {
 
 	MarketOrderDao dao;

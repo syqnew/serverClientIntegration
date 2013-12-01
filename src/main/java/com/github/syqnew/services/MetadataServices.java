@@ -18,16 +18,32 @@ import com.github.syqnew.dao.impl.MetadataDaoImpl;
 import com.github.syqnew.domain.Client;
 import com.github.syqnew.domain.Metadata;
 
+/**
+ * Operations:
+ * - GET metadata
+ * 
+ * @author snew
+ *
+ */
 public class MetadataServices {
 	
-	MetadataDao dao; 
-	ClientDao clientDao;
+	private MetadataDao dao; 
+	private ClientDao clientDao;
 	
 	public MetadataServices() {
 		dao = new MetadataDaoImpl();
 		clientDao = new ClientDaoImpl();
 	}
 	
+	/**
+	 * Get the metadata and a specific client's data from the database
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
 	public void getMetadataClient(HttpServletRequest request,
 			HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();

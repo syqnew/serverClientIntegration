@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Response;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
@@ -20,16 +19,37 @@ import com.github.syqnew.dao.impl.SaleDaoImpl;
 import com.github.syqnew.domain.MarketOrder;
 import com.github.syqnew.domain.Sale;
 
+/**
+ * Operations:
+ * - GET all the sales or the ones associated with a client
+ * - POST cancel an order
+ * 
+ * @author snew
+ *
+ */
 public class SaleServices {
 
 	SaleDao dao;
 	MarketOrderDao orderDao;
 
+	/**
+	 * Creates a SaleServices Object
+	 */
 	public SaleServices() {
 		dao = new SaleDaoImpl();
 		orderDao = new MarketOrderDaoImpl();
 	}
 
+	/**
+	 * Get all the sales ever made or just the ones that involved a given client 
+	 * from the database
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
 	public void getSales(HttpServletRequest request,
 			HttpServletResponse response) throws JsonGenerationException,
 			JsonMappingException, IOException {
@@ -53,6 +73,15 @@ public class SaleServices {
 		}
 	}
 
+	/**
+	 * Cancel an order in the database
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
 	public void cancelOrder(HttpServletRequest request, HttpServletResponse response) throws JsonParseException,
 			JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();

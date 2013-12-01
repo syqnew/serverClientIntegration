@@ -1,8 +1,6 @@
 package com.github.syqnew.services;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,14 +14,33 @@ import com.github.syqnew.dao.NewsDao;
 import com.github.syqnew.dao.impl.NewsDaoImpl;
 import com.github.syqnew.domain.News;
 
+/**
+ * Operations:
+ * - GET news given an id
+ * - POST news
+ * @author snew
+ *
+ */
 public class NewsServices {
 
-	NewsDao dao;
+	private NewsDao dao;
 
+	/**
+	 * Creates a NewsServices Object
+	 */
 	public NewsServices() {
 		dao = new NewsDaoImpl();
 	}
 
+	/**
+	 * Get the news associated with a certain id from the database
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
 	public void getNews(HttpServletRequest request, HttpServletResponse response)
 			throws JsonGenerationException, JsonMappingException, IOException {
 		String idStr = request.getParameter("id");
@@ -34,6 +51,15 @@ public class NewsServices {
 		response.getWriter().println(mapper.writeValueAsString(news));
 	}
 
+	/**
+	 * Insert News into the database
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
 	public void insertNews(HttpServletRequest request,
 			HttpServletResponse response) throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
